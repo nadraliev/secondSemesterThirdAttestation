@@ -11,18 +11,25 @@ namespace GraphLibrary
         public string Value { get; set; }
         public int Id { get; set; }
         
-        public List<Connection> Connections { get; set; }
+        public List<Connection> OutConnections { get; set; }
+        public List<Connection> InConnections { get; set; }
+
+        public int CoordX { get; set; }
+        public int CoordY { get; set; }
+
+        public bool Selected { get; set; }
 
         public GraphNode(int id, string value)
         {
             Id = id;
             Value = value;
-            Connections = new List<Connection>();
+            OutConnections = new List<Connection>();
+            InConnections = new List<Connection>();
+            CoordX = 0;
+            CoordY = 0;
+            Selected = false;
         }
 
-        public void AddConnection(GraphNode destination, int weight)
-        {
-            Connections.Add(new Connection(this, destination, weight));
-        }
+        
     }
 }

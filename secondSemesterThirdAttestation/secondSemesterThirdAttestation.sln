@@ -7,6 +7,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "19", "19", "{FA701B59-8FB8-
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphLibrary", "GraphLibrary\GraphLibrary.csproj", "{A17D3F2F-51E8-4E61-946A-862D198D0273}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphForm", "GraphForm\GraphForm.csproj", "{5340B5FF-D82A-4280-9133-C40063043972}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,11 +19,16 @@ Global
 		{A17D3F2F-51E8-4E61-946A-862D198D0273}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A17D3F2F-51E8-4E61-946A-862D198D0273}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A17D3F2F-51E8-4E61-946A-862D198D0273}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5340B5FF-D82A-4280-9133-C40063043972}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5340B5FF-D82A-4280-9133-C40063043972}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5340B5FF-D82A-4280-9133-C40063043972}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5340B5FF-D82A-4280-9133-C40063043972}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{A17D3F2F-51E8-4E61-946A-862D198D0273} = {FA701B59-8FB8-4A89-8901-1A5BD4DF7DF4}
+		{5340B5FF-D82A-4280-9133-C40063043972} = {FA701B59-8FB8-4A89-8901-1A5BD4DF7DF4}
 	EndGlobalSection
 EndGlobal

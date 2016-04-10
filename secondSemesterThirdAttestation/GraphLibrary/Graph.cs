@@ -8,7 +8,8 @@ namespace GraphLibrary
 {
     public class Graph
     {
-        public List<GraphNode> Nodes;
+        public List<GraphNode> Nodes { get; set; }
+        public List<Connection> Connections { get; set; }
         public int Count { get; set; }
 
         public Graph()
@@ -17,10 +18,18 @@ namespace GraphLibrary
             Count = 0;
         }
 
-        public void AddNode(int id, string value)
+        public void AddNode(string value)
         {
-            Nodes.Add(new GraphNode(id, value));
+            Nodes.Add(new GraphNode(Count, value));
             Count++;
+        }
+
+        public void AddConnection(GraphNode source, GraphNode destination, int weight)
+        {
+            Connection connection = new Connection(source, destination, weight);
+            Connections.Add(connection);
+            source.OutConnections.Add(connection);  //links to connection duplicates to node to reduce calculations during drawing
+            destination.InConnections.Add(connection);
         }
     }
 }
