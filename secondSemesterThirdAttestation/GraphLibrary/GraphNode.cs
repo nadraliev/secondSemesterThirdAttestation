@@ -10,17 +10,17 @@ namespace GraphLibrary
     public class GraphNode<T>
     {
         public T Value { get; set; }
-        public int Id { get; protected set; }
+        public int Id { get; internal set; }
         
-        public List<Connection<T>> OutConnections { get; protected set; }
-        public List<Connection<T>> InConnections { get; protected set; }
+        public List<Connection<T>> OutConnections { get; internal set; }
+        public List<Connection<T>> InConnections { get; internal set; }
 
         public int CoordX { get; set; }
         public int CoordY { get; set; }
 
         public bool IsSelected { get; set; }
 
-        public Bitmap bitmap { get; private set; }
+        public Bitmap BitmapNode { get; internal set; }
 
         public GraphNode(int id, T value)
         {

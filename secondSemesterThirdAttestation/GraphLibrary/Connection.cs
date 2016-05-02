@@ -12,9 +12,29 @@ namespace GraphLibrary
         public GraphNode<T> Source { get; set; }
         public GraphNode<T> Destination { get; set; }
 
+        public int StartX { get
+            {
+                return Source.CoordX + Source.BitmapNode.Size.Width / 2;
+            }
+        }
+        public int StartY { get
+            {
+                return Source.CoordY + Source.BitmapNode.Size.Height / 2;
+            }
+        }
+        public int EndX { get
+            {
+                return Destination.CoordX + Destination.BitmapNode.Size.Width / 2;
+            }
+        }
+        public int EndY { get
+            {
+                return Destination.CoordY + Destination.BitmapNode.Size.Height / 2;
+            }
+        }
         public int Weight { get; set; }
 
-        public Bitmap bitmap { get; private set; }
+        public Bitmap BitmapConnection { get; internal set; }
 
         public Connection(GraphNode<T> source, GraphNode<T> destination, int weight)
         {
