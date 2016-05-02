@@ -6,27 +6,28 @@ using System.Threading.Tasks;
 
 namespace GraphLibrary
 {
-    public class Graph
+    public class Graph<T>
     {
-        public List<GraphNode> Nodes { get; set; }
-        public List<Connection> Connections { get; set; }
-        public int Count { get; set; }
+        public List<GraphNode<T>> Nodes { get; private set; }
+        public List<Connection<T>> Connections { get; private set; }
+
+        public int Count { get; private set; }
 
         public Graph()
         {
-            Nodes = new List<GraphNode>();
+            Nodes = new List<GraphNode<T>>();
             Count = 0;
         }
 
-        public void AddNode(string value)
+        public void AddNode(T value)
         {
-            Nodes.Add(new GraphNode(Count, value));
+            Nodes.Add(new GraphNode<T>(Count, value));
             Count++;
         }
 
-        public void AddConnection(GraphNode source, GraphNode destination, int weight)
+        public void AddConnection(GraphNode<T> source, GraphNode<T> destination, int weight)
         {
-            Connection connection = new Connection(source, destination, weight);
+            Connection<T> connection = new Connection<T>(source, destination, weight);
             Connections.Add(connection);
             source.OutConnections.Add(connection);  //links to connection duplicates to node to reduce calculations during drawing
             destination.InConnections.Add(connection);

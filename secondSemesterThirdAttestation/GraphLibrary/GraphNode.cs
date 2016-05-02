@@ -3,31 +3,34 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Drawing;
 
 namespace GraphLibrary
 {
-    public class GraphNode
+    public class GraphNode<T>
     {
-        public string Value { get; set; }
-        public int Id { get; set; }
+        public T Value { get; set; }
+        public int Id { get; protected set; }
         
-        public List<Connection> OutConnections { get; set; }
-        public List<Connection> InConnections { get; set; }
+        public List<Connection<T>> OutConnections { get; protected set; }
+        public List<Connection<T>> InConnections { get; protected set; }
 
         public int CoordX { get; set; }
         public int CoordY { get; set; }
 
-        public bool Selected { get; set; }
+        public bool IsSelected { get; set; }
 
-        public GraphNode(int id, string value)
+        public Bitmap bitmap { get; private set; }
+
+        public GraphNode(int id, T value)
         {
             Id = id;
             Value = value;
-            OutConnections = new List<Connection>();
-            InConnections = new List<Connection>();
+            OutConnections = new List<Connection<T>>();
+            InConnections = new List<Connection<T>>();
             CoordX = 0;
             CoordY = 0;
-            Selected = false;
+            IsSelected = false;
         }
 
         
