@@ -42,5 +42,19 @@ namespace GraphLibrary
             Destination = destination;
             Weight = weight;
         }
+
+        internal void Draw(Pen linePen, Brush textBrush, Font font, Graphics graphics)
+        {
+            SizeF stringSize = graphics.MeasureString(Weight.ToString(), font);
+            //caclulate bitmap size (line size)
+            int width = Math.Abs(EndX - StartX);
+            int height = Math.Abs(EndY - StartY);
+            BitmapConnection = new Bitmap(width, height);
+            Graphics connectionGraphics = Graphics.FromImage(BitmapConnection);
+            if (EndY - StartY + EndX - StartX > 0)  //line is going from top left corner to bottom right
+                connectionGraphics.DrawLine(linePen, 0, 0, width, height);
+            else connectionGraphics.DrawLine(linePen, width, height, 0, 0);
+            connectionGraphics.DrawString(Weight.ToString(), font, textBrush, width / 2, height / 2);
+        }
     }
 }

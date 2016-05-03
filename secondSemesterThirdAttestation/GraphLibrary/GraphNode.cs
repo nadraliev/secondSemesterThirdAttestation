@@ -33,6 +33,14 @@ namespace GraphLibrary
             IsSelected = false;
         }
 
-        
+        internal void Draw(Brush backgroundBrush, Brush textBrush, Font font, Graphics graphics)
+        {
+            SizeF stringSize = graphics.MeasureString(Value.ToString(), font);
+            BitmapNode = new Bitmap(Convert.ToInt32(stringSize.Width) + 10, Convert.ToInt32(stringSize.Height) + 10);
+            Graphics nodeGraphics = Graphics.FromImage(BitmapNode);
+            nodeGraphics.FillRectangle(backgroundBrush, 0, 0, Convert.ToInt32(stringSize.Width) + 10, Convert.ToInt32(stringSize.Height) + 10); //draw rectangle with size to wrap content
+            nodeGraphics.DrawString(Value.ToString(), font, textBrush, 5, 5);  //draw string with padding 5
+        }
+
     }
 }
