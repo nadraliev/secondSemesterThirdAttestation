@@ -16,11 +16,17 @@ namespace GraphLibrary
 
         public Bitmap BitmapGraph { get; private set; }
 
+        public GraphNode<T> Selected { get; set; }
+
+        public bool IsDragging;
+
+
         public Graph()
         {
             Nodes = new List<GraphNode<T>>();
             Connections = new List<Connection<T>>();
             Count = 0;
+            IsDragging = false;
         }
 
         public void AddNode(T value)
@@ -37,13 +43,22 @@ namespace GraphLibrary
             destination.InConnections.Add(connection);
         }
 
-        public void Draw(Graphics graphics, Brush nodeBackgroundBrush, Brush nodeTextBrush, Brush connectionTextBrush, Pen connectionPen, Font nodeFont, Font connectionFont, int width, int height)
+        public GraphNode<T> FindNode(double x, double y)
+        {
+            foreach (GraphNode<T> node in Nodes)
+                if ((x > node.CoordX && x < node.CoordX + node.BitmapNode.Size.Width) && (y > node.CoordY && y < node.CoordY + node.BitmapNode.Size.Height))
+                    return node;
+            return null;
+        }
+
+        public void Draw(Graphics graphics, Brush nodeBackgroundBrush, Brush selectedNodeBrush, Brush nodeTextBrush, Brush connectionTextBrush, Pen connectionPen, Font nodeFont, Font connectionFont, int width, int height)
         {
             BitmapGraph = new Bitmap(width, height);
             Graphics graphGraphics = Graphics.FromImage(BitmapGraph);
             foreach (GraphNode<T> node in Nodes)
             {
-                node.Draw(nodeBackgroundBrush, nodeTextBrush, nodeFont, graphics);
+                if (Selected == node) node.Draw(selectedNodeBrush, nodeTextBrush, nodeFont, graphics);
+                else node.Draw(nodeBackgroundBrush, nodeTextBrush, nodeFont, graphics);
             }
 
             foreach (Connection<T> connection in Connections)

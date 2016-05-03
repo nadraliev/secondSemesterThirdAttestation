@@ -14,23 +14,31 @@ namespace GraphForm
     public partial class main_form : Form
     {
         private Graph<int> graph;
-        private Graphics graphics;
 
-        private int CircleDiameter = 40;
+        private int PressedX;
+        private int PressedY;
 
-        private Font font = new Font("Arial", 16);
+
+        //------------------customization-----------------------------//
+        private Font fontNode = new Font("Arial", 16);
+        private Font fontConnection = new Font("Arial", 14);
+        private Brush nodeBackground = Brushes.Brown;
+        private Brush selectedNodeBrush = Brushes.SandyBrown;
+        private Brush nodeText = Brushes.White;
+        private Brush connectionText = Brushes.Purple;
+        private Pen connectionLine = Pens.Black;
+        //-----------------------------------------------------------//
 
         public main_form()
         {
             InitializeComponent();
-            graphics = main_panel.CreateGraphics();
             graph = new Graph<int>();
         }
 
         public void ResizeElements()
         {
-            main_panel.Width = this.Width -30;
-            main_panel.Height = this.Height - 30;
+            graph_output.Width = this.Width - 30;
+            graph_output.Height = this.Height - 30;
         }
 
         private void main_form_size_changed(object sender, EventArgs e)
@@ -42,61 +50,97 @@ namespace GraphForm
         {
             if (graph == null) graph = new Graph<int>();
             graph.AddNode((int)input_number_numeric.Value);
-            DrawNode(graph.Nodes.Last());
+            graph_output.Refresh();
         }
 
-        private void main_panel_mouse_click(object sender, MouseEventArgs eventArgs)    //depricated
+        //--------------------handle mouse events---------------//
+
+        private void graph_output_mouse_down(object sender, MouseEventArgs args)
         {
-            for (int i =0; i < graph.Count; i++)
+            if (graph != null)
             {
-                if (eventArgs.X - graph.Nodes[i].CoordX <= CircleDiameter-5 && eventArgs.Y - graph.Nodes[i].CoordY <= CircleDiameter-5 )
+                if (graph.Selected == null)
+                    graph.Selected = graph.FindNode(args.X, args.Y);
+                graph.IsDragging = true;
+                PressedX = args.X;
+                PressedY = args.Y;
+            }
+        }
+
+        private void graph_output_mouse_up(object sender, MouseEventArgs args)
+        {
+            if (graph != null)
+            {
+                if (graph.Selected != null)
                 {
-                    graph.Nodes[i].IsSelected = !graph.Nodes[i].IsSelected; //TODO make sure there is only one selected node
+                    if (!(args.X == PressedX && args.Y == PressedY)) 
+                        graph.Selected = null;
+                    GraphNode<int> temp = graph.FindNode(args.X, args.Y);
+                    if (temp != null)
+                    {
+                        if (temp != graph.Selected)
+                        {
+                            graph.AddConnection(graph.Selected, temp, (int)connection_weight.Value);
+                            graph.Selected = null;
+                        }
+                    }
+                    graph.IsDragging = false;
+                    graph_output.Refresh();
                 }
             }
-            Draw();
         }
 
-        private void Draw() //depricated
+        private void graph_output_mouse_move(object sender, MouseEventArgs args)
         {
-            for (int i = 0; i < graph.Count; i++)
+            if (graph != null)
             {
-                DrawNode(graph.Nodes[i]);
+                if (graph.Selected != null && graph.IsDragging)
+                {
+                    graph.Selected.CoordX = args.X;
+                    graph.Selected.CoordY = args.Y;
+                    graph_output.Refresh();
+                }
             }
         }
 
-        private void DrawNode(GraphNode<int> node)  //depricated
+        
+        private void graph_output_mouse_click(object sender, MouseEventArgs args)
         {
-            graphics.DrawEllipse(Pens.Black, node.CoordX, node.CoordY, CircleDiameter, CircleDiameter);
-            if (node.IsSelected)
-                graphics.FillEllipse(Brushes.MediumPurple, node.CoordX, node.CoordY, CircleDiameter, CircleDiameter);
-            else
-                graphics.FillEllipse(Brushes.Purple, node.CoordX, node.CoordY, CircleDiameter, CircleDiameter);
-            graphics.DrawString(node.Value.ToString(), font, Brushes.White, CircleDiameter / 4, CircleDiameter / 4);
+            /**
+            if (graph != null)
+            {
+                GraphNode<int> temp = graph.FindNode(args.X, args.Y);
+
+
+                if (graph.Selected == null)
+                {
+                    graph.Selected = temp;
+                    graph_output.Refresh();
+                }
+                else
+                {
+                    if (temp != null)
+                    {
+                        graph.AddConnection(graph.Selected, temp, (int)connection_weight.Value);
+                        graph_output.Refresh();
+                    }
+                }
+
+            }
+    */
         }
+    
+
+        //------------------------------------------------------//
+
 
         private void picture_box_paint(object sender, PaintEventArgs e)
         {
             e.Graphics.Clear(BackColor);
-            graph.Draw(e.Graphics, Brushes.Brown, Brushes.White, Brushes.Purple, Pens.Black, new Font("Arial", 16), new Font("Arial", 14), pictureBox1.Width, pictureBox1.Height);
+            graph.Draw(e.Graphics, nodeBackground, selectedNodeBrush, nodeText, connectionText, connectionLine, fontNode, fontConnection, graph_output.Width, graph_output.Height);
             e.Graphics.DrawImage(graph.BitmapGraph, 0, 0);
         }
 
-        private void button1_Click(object sender, EventArgs e)  //test. TODO use pictureBox instead of panel
-        {
-            graph = new Graph<int>();
-            graph.AddNode(10);
-            graph.AddNode(20);
-            graph.Nodes[0].CoordX = 100;
-            graph.Nodes[0].CoordY = 100;
-            graph.AddConnection(graph.Nodes[0], graph.Nodes[1], 5);
-            for (int i = 0; i < 30; i++)
-            {
-                pictureBox1.Refresh();
-                graph.Nodes[0].CoordX += 10;
-                graph.Nodes[0].CoordY += 5;
-            }
-            
-        }
+
     }
 }

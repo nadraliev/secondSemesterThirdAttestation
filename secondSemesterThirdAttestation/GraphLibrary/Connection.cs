@@ -12,22 +12,22 @@ namespace GraphLibrary
         public GraphNode<T> Source { get; set; }
         public GraphNode<T> Destination { get; set; }
 
-        public int StartX { get
+        public float StartX { get
             {
                 return Source.CoordX + Source.BitmapNode.Size.Width / 2;
             }
         }
-        public int StartY { get
+        public float StartY { get
             {
                 return Source.CoordY + Source.BitmapNode.Size.Height / 2;
             }
         }
-        public int EndX { get
+        public float EndX { get
             {
                 return Destination.CoordX + Destination.BitmapNode.Size.Width / 2;
             }
         }
-        public int EndY { get
+        public float EndY { get
             {
                 return Destination.CoordY + Destination.BitmapNode.Size.Height / 2;
             }
@@ -47,13 +47,13 @@ namespace GraphLibrary
         {
             SizeF stringSize = graphics.MeasureString(Weight.ToString(), font);
             //caclulate bitmap size (line size)
-            int width = Math.Abs(EndX - StartX);
-            int height = Math.Abs(EndY - StartY);
-            BitmapConnection = new Bitmap(width, height);
+            float width = Math.Abs(EndX - StartX);
+            float height = Math.Abs(EndY - StartY);
+            BitmapConnection = new Bitmap(Convert.ToInt32(Math.Max(width, stringSize.Width)), Convert.ToInt32(Math.Max(height, stringSize.Height)));
             Graphics connectionGraphics = Graphics.FromImage(BitmapConnection);
-            if (EndY - StartY + EndX - StartX > 0)  //line is going from top left corner to bottom right
+            if ((EndY - StartY > 0 && EndX - StartX > 0) || (EndY - StartY < 0 && EndX - StartX < 0))  //line is going from top left corner to bottom right
                 connectionGraphics.DrawLine(linePen, 0, 0, width, height);
-            else connectionGraphics.DrawLine(linePen, width, height, 0, 0);
+            else connectionGraphics.DrawLine(linePen, 0, height, width, 0);
             connectionGraphics.DrawString(Weight.ToString(), font, textBrush, width / 2, height / 2);
         }
     }
