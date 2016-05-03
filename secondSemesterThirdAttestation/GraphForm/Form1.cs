@@ -82,6 +82,9 @@ namespace GraphForm
                         {
                             graph.AddConnection(graph.Selected, temp, (int)connection_weight.Value);
                             graph.Selected = null;
+                        } else
+                        {
+                            //create loop
                         }
                     }
                     graph.IsDragging = false;
@@ -102,43 +105,21 @@ namespace GraphForm
                 }
             }
         }
-
-        
-        private void graph_output_mouse_click(object sender, MouseEventArgs args)
-        {
-            /**
-            if (graph != null)
-            {
-                GraphNode<int> temp = graph.FindNode(args.X, args.Y);
-
-
-                if (graph.Selected == null)
-                {
-                    graph.Selected = temp;
-                    graph_output.Refresh();
-                }
-                else
-                {
-                    if (temp != null)
-                    {
-                        graph.AddConnection(graph.Selected, temp, (int)connection_weight.Value);
-                        graph_output.Refresh();
-                    }
-                }
-
-            }
-    */
-        }
     
 
         //------------------------------------------------------//
 
 
+        public void DrawGraphInt(Graph<int> graph, Graphics graphics)
+        {
+            graphics.Clear(BackColor);
+            graph.Draw(graphics, nodeBackground, selectedNodeBrush, nodeText, connectionText, connectionLine, fontNode, fontConnection, graph_output.Width, graph_output.Height);
+            graphics.DrawImage(graph.BitmapGraph, 0, 0);
+        }
+
         private void picture_box_paint(object sender, PaintEventArgs e)
         {
-            e.Graphics.Clear(BackColor);
-            graph.Draw(e.Graphics, nodeBackground, selectedNodeBrush, nodeText, connectionText, connectionLine, fontNode, fontConnection, graph_output.Width, graph_output.Height);
-            e.Graphics.DrawImage(graph.BitmapGraph, 0, 0);
+            DrawGraphInt(graph, e.Graphics);
         }
 
 

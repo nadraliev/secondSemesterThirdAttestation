@@ -71,7 +71,6 @@ namespace GraphForm
             this.graph_output.TabIndex = 4;
             this.graph_output.TabStop = false;
             this.graph_output.Paint += new System.Windows.Forms.PaintEventHandler(this.picture_box_paint);
-            this.graph_output.MouseClick += new System.Windows.Forms.MouseEventHandler(this.graph_output_mouse_click);
             this.graph_output.MouseDown += new System.Windows.Forms.MouseEventHandler(this.graph_output_mouse_down);
             this.graph_output.MouseMove += new System.Windows.Forms.MouseEventHandler(this.graph_output_mouse_move);
             this.graph_output.MouseUp += new System.Windows.Forms.MouseEventHandler(this.graph_output_mouse_up);

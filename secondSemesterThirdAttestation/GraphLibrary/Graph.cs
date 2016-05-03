@@ -37,10 +37,13 @@ namespace GraphLibrary
 
         public void AddConnection(GraphNode<T> source, GraphNode<T> destination, int weight)
         {
-            Connection<T> connection = new Connection<T>(source, destination, weight);
-            Connections.Add(connection);
-            source.OutConnections.Add(connection);  //links to connection duplicates to node to reduce calculations during drawing
-            destination.InConnections.Add(connection);
+            if (source != null && destination != null)
+            {
+                Connection<T> connection = new Connection<T>(source, destination, weight);
+                Connections.Add(connection);
+                source.OutConnections.Add(connection);  //links to connection duplicates to node to reduce calculations during drawing
+                destination.InConnections.Add(connection);
+            }
         }
 
         public GraphNode<T> FindNode(double x, double y)
