@@ -11,12 +11,14 @@ namespace GraphLibrary
     {
         public T Value { get; set; }
         public int Id { get; internal set; }
-        
+
         public List<Connection<T>> OutConnections { get; internal set; }
         public List<Connection<T>> InConnections { get; internal set; }
 
         public float CoordX { get; set; }
         public float CoordY { get; set; }
+
+        public bool Visisted { get; set; }
 
         public Bitmap BitmapNode { get; internal set; }
 
@@ -32,7 +34,40 @@ namespace GraphLibrary
             InConnections = new List<Connection<T>>();
             CoordX = 0;
             CoordY = 0;
+            Visisted = false;
         }
+
+        public List<Connection<T>> FindShortestWay(Graph<T> graph, GraphNode<T> to)
+        {
+            if (this == to) return new List<Connection<T>>();
+            else
+            {
+                Visisted = true;    //mark node as visited to avoid loop
+                List<Connection<T>> temp;
+                List<Connection<T>> minWay = new List<Connection<T>>(); //result
+                int min = int.MaxValue;
+
+                foreach (Connection<T> connection in OutConnections)
+                {
+                    temp = new List<Connection<T>>();
+                    temp.Add(connection);   //include current connection
+
+                    if (connection.Destination != to)   //we're not at destination, go recursively
+                    {
+                        if (!connection.Destination.Visisted) temp.AddRange(connection.Destination.FindShortestWay(graph, to));
+                    }
+
+                    if (min > graph.FindWayLength(temp))
+                    {
+                        minWay = temp;
+                        min = graph.FindWayLength(minWay);
+                    }
+
+                }
+                return minWay;
+            }
+        }
+
 
         internal void Draw(Brush backgroundBrush, Brush textBrush, Font font, Graphics graphics)
         {
@@ -40,7 +75,7 @@ namespace GraphLibrary
             BitmapNode = new Bitmap(Convert.ToInt32(stringSize.Width) + padding, Convert.ToInt32(stringSize.Height) + padding);
             Graphics nodeGraphics = Graphics.FromImage(BitmapNode);
             nodeGraphics.FillRectangle(backgroundBrush, 0, 0, Convert.ToInt32(stringSize.Width) + padding, Convert.ToInt32(stringSize.Height) + padding); //draw rectangle with size to wrap content
-            nodeGraphics.DrawString(Value.ToString(), font, textBrush, padding/2, padding/2);
+            nodeGraphics.DrawString(Value.ToString(), font, textBrush, padding / 2, padding / 2);
         }
 
     }

@@ -80,12 +80,18 @@ namespace GraphForm
                     {
                         if (temp != graph.Selected)
                         {
-                            graph.AddConnection(graph.Selected, temp, (int)connection_weight.Value);
+                            //selected two nodes
+                            if (create_connection_rbtn.Checked)
+                            {
+                                graph.AddConnection(graph.Selected, temp, (int)connection_weight.Value);
+                            } else if (find_shortest_way_rbtn.Checked)
+                            {
+                                List<Connection<int>> way = graph.Selected.FindShortestWay(graph, temp);
+                                shortest_way_label.Text = graph.FindWayLength(way).ToString();
+                                graph.ClearVisits();
+                            }
                             graph.Selected = null;
-                        } else
-                        {
-                            //create loop
-                        }
+                        } 
                     }
                     graph.IsDragging = false;
                     graph_output.Refresh();

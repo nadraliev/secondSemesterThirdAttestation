@@ -80,7 +80,17 @@ namespace GraphLibrary
             }
         }
 
-        
+        public int FindWayLength(List<Connection<T>> way)
+        {
+            int result = 0;
+            foreach (Connection<T> connection in way) result += connection.Weight;
+            return result;
+        }
+
+        public void ClearVisits()
+        {
+            foreach (GraphNode<T> node in Nodes) node.Visisted = false;
+        }
 
         
     }

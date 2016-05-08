@@ -36,6 +36,10 @@ namespace GraphForm
             this.connection_weight = new System.Windows.Forms.NumericUpDown();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.shortest_way_label = new System.Windows.Forms.Label();
+            this.create_connection_rbtn = new System.Windows.Forms.RadioButton();
+            this.find_shortest_way_rbtn = new System.Windows.Forms.RadioButton();
             ((System.ComponentModel.ISupportInitialize)(this.input_number_numeric)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.graph_output)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.connection_weight)).BeginInit();
@@ -43,7 +47,7 @@ namespace GraphForm
             // 
             // input_number_numeric
             // 
-            this.input_number_numeric.Location = new System.Drawing.Point(13, 12);
+            this.input_number_numeric.Location = new System.Drawing.Point(12, 35);
             this.input_number_numeric.Maximum = new decimal(new int[] {
             99,
             0,
@@ -55,7 +59,7 @@ namespace GraphForm
             // 
             // add_node_button
             // 
-            this.add_node_button.Location = new System.Drawing.Point(159, 12);
+            this.add_node_button.Location = new System.Drawing.Point(159, 32);
             this.add_node_button.Name = "add_node_button";
             this.add_node_button.Size = new System.Drawing.Size(75, 23);
             this.add_node_button.TabIndex = 2;
@@ -65,9 +69,9 @@ namespace GraphForm
             // 
             // graph_output
             // 
-            this.graph_output.Location = new System.Drawing.Point(13, 67);
+            this.graph_output.Location = new System.Drawing.Point(13, 103);
             this.graph_output.Name = "graph_output";
-            this.graph_output.Size = new System.Drawing.Size(1284, 582);
+            this.graph_output.Size = new System.Drawing.Size(1284, 546);
             this.graph_output.TabIndex = 4;
             this.graph_output.TabStop = false;
             this.graph_output.Paint += new System.Windows.Forms.PaintEventHandler(this.picture_box_paint);
@@ -77,7 +81,7 @@ namespace GraphForm
             // 
             // connection_weight
             // 
-            this.connection_weight.Location = new System.Drawing.Point(382, 15);
+            this.connection_weight.Location = new System.Drawing.Point(498, 37);
             this.connection_weight.Minimum = new decimal(new int[] {
             1,
             0,
@@ -96,7 +100,7 @@ namespace GraphForm
             // 
             this.label1.AutoSize = true;
             this.label1.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.label1.Location = new System.Drawing.Point(10, 35);
+            this.label1.Location = new System.Drawing.Point(12, 19);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(143, 13);
             this.label1.TabIndex = 6;
@@ -106,17 +110,60 @@ namespace GraphForm
             // 
             this.label2.AutoSize = true;
             this.label2.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.label2.Location = new System.Drawing.Point(379, 35);
+            this.label2.Location = new System.Drawing.Point(624, 39);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(319, 13);
             this.label2.TabIndex = 7;
             this.label2.Text = "Enter weight here and then select two nodes to create connection";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.label3.Location = new System.Drawing.Point(349, 19);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(120, 13);
+            this.label3.TabIndex = 9;
+            this.label3.Text = "Choose selection action";
+            // 
+            // shortest_way_label
+            // 
+            this.shortest_way_label.Location = new System.Drawing.Point(495, 63);
+            this.shortest_way_label.Name = "shortest_way_label";
+            this.shortest_way_label.Size = new System.Drawing.Size(100, 14);
+            this.shortest_way_label.TabIndex = 10;
+            // 
+            // create_connection_rbtn
+            // 
+            this.create_connection_rbtn.AutoSize = true;
+            this.create_connection_rbtn.Location = new System.Drawing.Point(352, 37);
+            this.create_connection_rbtn.Name = "create_connection_rbtn";
+            this.create_connection_rbtn.Size = new System.Drawing.Size(112, 17);
+            this.create_connection_rbtn.TabIndex = 11;
+            this.create_connection_rbtn.TabStop = true;
+            this.create_connection_rbtn.Text = "Create connection";
+            this.create_connection_rbtn.UseVisualStyleBackColor = true;
+            // 
+            // find_shortest_way_rbtn
+            // 
+            this.find_shortest_way_rbtn.AutoSize = true;
+            this.find_shortest_way_rbtn.Location = new System.Drawing.Point(352, 60);
+            this.find_shortest_way_rbtn.Name = "find_shortest_way_rbtn";
+            this.find_shortest_way_rbtn.Size = new System.Drawing.Size(107, 17);
+            this.find_shortest_way_rbtn.TabIndex = 12;
+            this.find_shortest_way_rbtn.TabStop = true;
+            this.find_shortest_way_rbtn.Text = "Find shortest way";
+            this.find_shortest_way_rbtn.UseVisualStyleBackColor = true;
             // 
             // main_form
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1309, 661);
+            this.Controls.Add(this.find_shortest_way_rbtn);
+            this.Controls.Add(this.create_connection_rbtn);
+            this.Controls.Add(this.shortest_way_label);
+            this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.connection_weight);
@@ -141,6 +188,10 @@ namespace GraphForm
         private System.Windows.Forms.NumericUpDown connection_weight;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label shortest_way_label;
+        private System.Windows.Forms.RadioButton create_connection_rbtn;
+        private System.Windows.Forms.RadioButton find_shortest_way_rbtn;
     }
 }
 
