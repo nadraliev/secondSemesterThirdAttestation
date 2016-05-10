@@ -54,19 +54,21 @@ namespace GraphLibrary
             return null;
         }
 
-        public void Draw(Graphics graphics, Brush nodeBackgroundBrush, Brush selectedNodeBrush, Brush nodeTextBrush, Brush connectionTextBrush, Pen connectionPen, Font nodeFont, Font connectionFont, int width, int height)
+        public void Draw(Graphics graphics, Brush nodeBackgroundBrush, Brush selectedNodeBrush, Brush highlightedNodeBrush, Brush nodeTextBrush, Brush connectionTextBrush, Pen connectionPen, Pen highlightedConnectionPen, Font nodeFont, Font connectionFont, int width, int height)
         {
             BitmapGraph = new Bitmap(width, height);
             Graphics graphGraphics = Graphics.FromImage(BitmapGraph);
             foreach (GraphNode<T> node in Nodes)
             {
                 if (Selected == node) node.Draw(selectedNodeBrush, nodeTextBrush, nodeFont, graphics);
+                else if (node.Highlighted) node.Draw(highlightedNodeBrush, nodeTextBrush, nodeFont, graphics);
                 else node.Draw(nodeBackgroundBrush, nodeTextBrush, nodeFont, graphics);
             }
 
             foreach (Connection<T> connection in Connections)
             {
-                connection.Draw(connectionPen, connectionTextBrush, connectionFont, graphics);
+                if (connection.Highlighted) connection.Draw(highlightedConnectionPen, connectionTextBrush, connectionFont, graphics);
+                else connection.Draw(connectionPen, connectionTextBrush, connectionFont, graphics);
             }
 
             foreach (Connection<T> connection in Connections)
@@ -90,6 +92,22 @@ namespace GraphLibrary
         public void ClearVisits()
         {
             foreach (GraphNode<T> node in Nodes) node.Visisted = false;
+        }
+
+        public void HighlightWay(List<Connection<T>> way)
+        {
+            foreach (Connection<T> connection in way)
+            {
+                connection.Highlighted = true;
+                connection.Source.Highlighted = true;
+                connection.Destination.Highlighted = true;
+            }
+        }
+
+        public void ClearHighlights()
+        {
+            foreach (Connection<T> connection in Connections) connection.Highlighted = false;
+            foreach (GraphNode<T> node in Nodes) node.Highlighted = false;
         }
 
         

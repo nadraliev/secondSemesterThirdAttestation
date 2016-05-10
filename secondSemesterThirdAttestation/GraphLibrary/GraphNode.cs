@@ -19,6 +19,7 @@ namespace GraphLibrary
         public float CoordY { get; set; }
 
         public bool Visisted { get; set; }
+        public bool Highlighted { get; set; }
 
         public Bitmap BitmapNode { get; internal set; }
 
@@ -35,6 +36,7 @@ namespace GraphLibrary
             CoordX = 0;
             CoordY = 0;
             Visisted = false;
+            Highlighted = false;
         }
 
         public List<Connection<T>> FindShortestWay(Graph<T> graph, GraphNode<T> to)
@@ -54,17 +56,23 @@ namespace GraphLibrary
 
                     if (connection.Destination != to)   //we're not at destination, go recursively
                     {
-                        if (!connection.Destination.Visisted) temp.AddRange(connection.Destination.FindShortestWay(graph, to));
+                        if (!connection.Destination.Visisted)
+                        {
+                            List<Connection<T>> foo = connection.Destination.FindShortestWay(graph, to);
+                            if (foo != null)
+                                temp.AddRange(foo);
+                        }
                     }
 
-                    if (min > graph.FindWayLength(temp))
+                    if (min >= graph.FindWayLength(temp))
                     {
                         minWay = temp;
                         min = graph.FindWayLength(minWay);
                     }
 
                 }
-                return minWay;
+                if (minWay.Count != 0 && minWay.Last().Destination != to) return null;
+                else return minWay;
             }
         }
 

@@ -12,6 +12,8 @@ namespace GraphLibrary
         public GraphNode<T> Source { get; set; }
         public GraphNode<T> Destination { get; set; }
 
+        public bool Highlighted { get; set; }
+
         public float StartX { get
             {
                 return Source.CoordX + Source.BitmapNode.Size.Width / 2;
@@ -41,6 +43,7 @@ namespace GraphLibrary
             Source = source;
             Destination = destination;
             Weight = weight;
+            Highlighted = false;
         }
 
         internal void Draw(Pen linePen, Brush textBrush, Font font, Graphics graphics)

@@ -13,7 +13,7 @@ namespace GraphForm
 {
     public partial class main_form : Form
     {
-        private Graph<int> graph;
+        private Graph<string> graph;
 
         private int PressedX;
         private int PressedY;
@@ -22,17 +22,19 @@ namespace GraphForm
         //------------------customization-----------------------------//
         private Font fontNode = new Font("Arial", 16);
         private Font fontConnection = new Font("Arial", 14);
-        private Brush nodeBackground = Brushes.Brown;
-        private Brush selectedNodeBrush = Brushes.SandyBrown;
-        private Brush nodeText = Brushes.White;
-        private Brush connectionText = Brushes.Purple;
+        private Brush nodeBackground = Brushes.DarkCyan;
+        private Brush selectedNodeBrush = Brushes.Cyan;
+        private Brush highlightedNodeBrush = Brushes.Cyan;
+        private Brush nodeText = Brushes.Black;
+        private Brush connectionText = Brushes.Green;
         private Pen connectionLine = Pens.Black;
+        private Pen highlightedConnectionPen = Pens.Cyan;
         //-----------------------------------------------------------//
 
         public main_form()
         {
             InitializeComponent();
-            graph = new Graph<int>();
+            graph = new Graph<string>();
         }
 
         public void ResizeElements()
@@ -46,12 +48,6 @@ namespace GraphForm
             ResizeElements();
         }
 
-        private void add_node_button_Click(object sender, EventArgs e)
-        {
-            if (graph == null) graph = new Graph<int>();
-            graph.AddNode((int)input_number_numeric.Value);
-            graph_output.Refresh();
-        }
 
         //--------------------handle mouse events---------------//
 
@@ -75,7 +71,7 @@ namespace GraphForm
                 {
                     if (!(args.X == PressedX && args.Y == PressedY)) 
                         graph.Selected = null;
-                    GraphNode<int> temp = graph.FindNode(args.X, args.Y);
+                    GraphNode<string> temp = graph.FindNode(args.X, args.Y);
                     if (temp != null)
                     {
                         if (temp != graph.Selected)
@@ -86,9 +82,17 @@ namespace GraphForm
                                 graph.AddConnection(graph.Selected, temp, (int)connection_weight.Value);
                             } else if (find_shortest_way_rbtn.Checked)
                             {
-                                List<Connection<int>> way = graph.Selected.FindShortestWay(graph, temp);
-                                shortest_way_label.Text = graph.FindWayLength(way).ToString();
-                                graph.ClearVisits();
+                                List<Connection<string>> way = graph.Selected.FindShortestWay(graph, temp);
+                                if (way != null && way.Count != 0)
+                                {
+                                    shortest_way_label.Text = graph.FindWayLength(way).ToString();
+                                    graph.ClearVisits();
+                                    graph.HighlightWay(way);
+                                    graph_output.Refresh();
+                                } else
+                                {
+                                    MessageBox.Show("No way");
+                                }
                             }
                             graph.Selected = null;
                         } 
@@ -111,15 +115,54 @@ namespace GraphForm
                 }
             }
         }
-    
+
+        private void clear_highlights_btn_Click(object sender, EventArgs e)
+        {
+            graph.ClearHighlights();
+            graph_output.Refresh();
+        }
+
+        private void clear_graph_btn_Click(object sender, EventArgs e)
+        {
+            graph = new Graph<string>();
+            graph_output.Refresh();
+        }
+
+        private void add_node_button_Click(object sender, EventArgs e)
+        {
+            if (graph == null) graph = new Graph<string>();
+            graph.AddNode(add_element_tb.Text);
+            graph_output.Refresh();
+        }
+
+        private void find_node_min_summ_btn_Click(object sender, EventArgs e)
+        {
+            if (graph != null)
+            {
+                int min = int.MaxValue;
+                int summ = 0;
+                GraphNode<string> result = null;
+                foreach (GraphNode<string> node in graph.Nodes)
+                {
+                    summ = 0;
+                    foreach (GraphNode<string> secondNode in graph.Nodes)
+                    {
+                        summ += graph.FindWayLength(node.FindShortestWay(graph, secondNode));
+                    }
+                    if (min >= summ) result = node;
+                }
+                if (result != null) result.Highlighted = true;
+            }
+        }
+
 
         //------------------------------------------------------//
 
 
-        public void DrawGraphInt(Graph<int> graph, Graphics graphics)
+        public void DrawGraphInt(Graph<string> graph, Graphics graphics)
         {
             graphics.Clear(BackColor);
-            graph.Draw(graphics, nodeBackground, selectedNodeBrush, nodeText, connectionText, connectionLine, fontNode, fontConnection, graph_output.Width, graph_output.Height);
+            graph.Draw(graphics, nodeBackground, selectedNodeBrush, highlightedNodeBrush, nodeText, connectionText, connectionLine, highlightedConnectionPen, fontNode, fontConnection, graph_output.Width, graph_output.Height);
             graphics.DrawImage(graph.BitmapGraph, 0, 0);
         }
 
@@ -128,6 +171,6 @@ namespace GraphForm
             DrawGraphInt(graph, e.Graphics);
         }
 
-
+       
     }
 }
