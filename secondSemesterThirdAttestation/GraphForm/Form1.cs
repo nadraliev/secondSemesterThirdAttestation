@@ -175,6 +175,8 @@ namespace GraphForm
         private void picture_box_paint(object sender, PaintEventArgs e)
         {
             DrawGraphInt(graph, e.Graphics);
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
         }
 
        
