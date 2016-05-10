@@ -63,12 +63,15 @@ namespace GraphLibrary
                                 temp.AddRange(foo);
                         }
                     }
-
-                    if (min >= graph.FindWayLength(temp))
+                    if (temp.Count != 0 && temp.Last().Destination == to)
                     {
-                        minWay = temp;
-                        min = graph.FindWayLength(minWay);
+                        if (min >= graph.FindWayLength(temp))
+                        {
+                            minWay = temp;
+                            min = graph.FindWayLength(minWay);
+                        }
                     }
+
 
                 }
                 if (minWay.Count != 0 && minWay.Last().Destination != to) return null;

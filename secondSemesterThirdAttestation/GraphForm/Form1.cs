@@ -74,7 +74,7 @@ namespace GraphForm
                     GraphNode<string> temp = graph.FindNode(args.X, args.Y);
                     if (temp != null)
                     {
-                        if (temp != graph.Selected)
+                        if (temp != graph.Selected && graph.Selected != null)
                         {
                             //selected two nodes
                             if (create_connection_rbtn.Checked)
@@ -148,10 +148,16 @@ namespace GraphForm
                     foreach (GraphNode<string> secondNode in graph.Nodes)
                     {
                         summ += graph.FindWayLength(node.FindShortestWay(graph, secondNode));
+                        graph.ClearVisits();
                     }
-                    if (min >= summ) result = node;
+                    if (min >= summ)
+                    {
+                        result = node;
+                        min = summ;
+                    }
                 }
                 if (result != null) result.Highlighted = true;
+                graph_output.Refresh();
             }
         }
 

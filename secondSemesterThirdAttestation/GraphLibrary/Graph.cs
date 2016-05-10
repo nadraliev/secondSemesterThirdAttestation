@@ -85,7 +85,8 @@ namespace GraphLibrary
         public int FindWayLength(List<Connection<T>> way)
         {
             int result = 0;
-            foreach (Connection<T> connection in way) result += connection.Weight;
+            if (way != null)
+                foreach (Connection<T> connection in way) result += connection.Weight;
             return result;
         }
 
