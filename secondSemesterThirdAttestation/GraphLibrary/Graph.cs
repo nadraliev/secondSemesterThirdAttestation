@@ -102,6 +102,7 @@ namespace GraphLibrary
                 connection.Highlighted = true;
                 connection.Source.Highlighted = true;
                 connection.Destination.Highlighted = true;
+                foreach (Connection<T> second in Connections) if (connection.Source == second.Destination && connection.Destination == second.Source) second.Highlighted = true;
             }
         }
 
@@ -109,6 +110,7 @@ namespace GraphLibrary
         {
             foreach (Connection<T> connection in Connections) connection.Highlighted = false;
             foreach (GraphNode<T> node in Nodes) node.Highlighted = false;
+            Selected = null;
         }
 
         

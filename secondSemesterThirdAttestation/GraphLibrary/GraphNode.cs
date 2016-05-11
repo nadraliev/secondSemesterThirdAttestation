@@ -70,10 +70,12 @@ namespace GraphLibrary
                             minWay = temp;
                             min = graph.FindWayLength(minWay);
                         }
+                        
                     }
 
 
                 }
+                Visisted = false;
                 if (minWay.Count != 0 && minWay.Last().Destination != to) return null;
                 else return minWay;
             }
