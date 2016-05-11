@@ -79,7 +79,9 @@ namespace GraphForm
                             //selected two nodes
                             if (create_connection_rbtn.Checked)
                             {
+                                //creating two-way connection
                                 graph.AddConnection(graph.Selected, temp, (int)connection_weight.Value);
+                                graph.AddConnection(temp, graph.Selected, (int)connection_weight.Value);
                             } else if (find_shortest_way_rbtn.Checked)
                             {
                                 List<Connection<string>> way = graph.Selected.FindShortestWay(graph, temp);
