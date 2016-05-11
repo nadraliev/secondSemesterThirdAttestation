@@ -46,6 +46,19 @@ namespace GraphLibrary
             Highlighted = false;
         }
 
+        public bool IsCrossing(Connection<T> connection)
+        {
+            return Area(StartX, StartY, EndX, EndY, connection.StartX, connection.StartY) *
+                Area(StartX, StartY, EndX, EndY, connection.EndX, connection.EndY) <= 0 &&
+                Area(connection.StartX, connection.StartY, connection.EndX, connection.EndY, StartX, StartY) *
+                Area(connection.StartX, connection.StartY, connection.EndX, connection.EndY, EndX, EndY) <= 0;
+        }
+
+        public float Area(float x1, float y1, float x2, float y2, float x3, float y3)
+        {
+            return (x2 - x1) * (y3 - y1) - (y2 - y1) * (x3 - x1);
+        }
+
         internal void Draw(Pen linePen, Brush textBrush, Font font, Graphics graphics)
         {
             SizeF stringSize = graphics.MeasureString(Weight.ToString(), font);
