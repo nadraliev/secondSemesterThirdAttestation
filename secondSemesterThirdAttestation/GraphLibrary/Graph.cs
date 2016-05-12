@@ -14,7 +14,6 @@ namespace GraphLibrary
 
         public int Count { get; private set; }
 
-        public Bitmap BitmapGraph { get; private set; }
 
         public GraphNode<T> Selected { get; set; }
 
@@ -49,38 +48,12 @@ namespace GraphLibrary
         public GraphNode<T> FindNode(double x, double y)
         {
             foreach (GraphNode<T> node in Nodes)
-                if ((x > node.CoordX && x < node.CoordX + node.BitmapNode.Size.Width) && (y > node.CoordY && y < node.CoordY + node.BitmapNode.Size.Height))
+                if ((x > node.CoordX && x < node.CoordX + 2*(node.CenterCoordX-node.CoordX)) && (y > node.CoordY && y < node.CoordY + 2*(node.CenterCoordY-node.CoordY)))
                     return node;
             return null;
         }
 
-        public void Draw(Graphics graphics, Brush nodeBackgroundBrush, Brush selectedNodeBrush, Brush highlightedNodeBrush, Brush nodeTextBrush, Brush connectionTextBrush, Pen connectionPen, Pen highlightedConnectionPen, Font nodeFont, Font connectionFont, int width, int height)
-        {
-            BitmapGraph = new Bitmap(width, height);
-            Graphics graphGraphics = Graphics.FromImage(BitmapGraph);
-            foreach (GraphNode<T> node in Nodes)
-            {
-                if (Selected == node) node.Draw(selectedNodeBrush, nodeTextBrush, nodeFont, graphics);
-                else if (node.Highlighted) node.Draw(highlightedNodeBrush, nodeTextBrush, nodeFont, graphics);
-                else node.Draw(nodeBackgroundBrush, nodeTextBrush, nodeFont, graphics);
-            }
-
-            foreach (Connection<T> connection in Connections)
-            {
-                if (connection.Highlighted) connection.Draw(highlightedConnectionPen, connectionTextBrush, connectionFont, graphics);
-                else connection.Draw(connectionPen, connectionTextBrush, connectionFont, graphics);
-            }
-
-            foreach (Connection<T> connection in Connections)
-            {
-                graphGraphics.DrawImage(connection.BitmapConnection, Math.Min(connection.StartX, connection.EndX), Math.Min(connection.StartY, connection.EndY));
-            }
-
-            foreach (GraphNode<T> node in Nodes)
-            {
-                graphGraphics.DrawImage(node.BitmapNode, node.CoordX, node.CoordY);
-            }
-        }
+      
 
         public int FindWayLength(List<Connection<T>> way)
         {

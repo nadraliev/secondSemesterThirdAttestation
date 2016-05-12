@@ -170,8 +170,8 @@ namespace GraphForm
         public void DrawGraphInt(Graph<string> graph, Graphics graphics)
         {
             graphics.Clear(BackColor);
-            graph.Draw(graphics, nodeBackground, selectedNodeBrush, highlightedNodeBrush, nodeText, connectionText, connectionLine, highlightedConnectionPen, fontNode, fontConnection, graph_output.Width, graph_output.Height);
-            graphics.DrawImage(graph.BitmapGraph, 0, 0);
+            Bitmap graphBitmap = DrawingGraph<string>.DrawGraph( graph, graphics, nodeBackground, selectedNodeBrush, highlightedNodeBrush, nodeText, connectionText, connectionLine, highlightedConnectionPen, fontNode, fontConnection, graph_output.Width, graph_output.Height);
+            graphics.DrawImage(graphBitmap, 0, 0);
         }
 
         private void picture_box_paint(object sender, PaintEventArgs e)
