@@ -48,12 +48,12 @@ namespace GraphLibrary
         public GraphNode<T> FindNode(double x, double y)
         {
             foreach (GraphNode<T> node in Nodes)
-                if ((x > node.CoordX && x < node.CoordX + 2*(node.CenterCoordX-node.CoordX)) && (y > node.CoordY && y < node.CoordY + 2*(node.CenterCoordY-node.CoordY)))
+                if ((x > node.CoordX && x < node.CoordX + 2 * (node.CenterCoordX - node.CoordX)) && (y > node.CoordY && y < node.CoordY + 2 * (node.CenterCoordY - node.CoordY)))
                     return node;
             return null;
         }
 
-      
+
 
         public int FindWayLength(List<Connection<T>> way)
         {
@@ -79,6 +79,31 @@ namespace GraphLibrary
             }
         }
 
+        public void ClearBlocks()
+        {
+            foreach (GraphNode<T> node in Nodes) node.Blocked = false;
+            foreach (Connection<T> connection in Connections) connection.Blocked = false;
+        }
+
+        public void BlockConnections(List<Connection<T>> way)
+        {
+            foreach (Connection<T> connection in way)
+            {
+                connection.Blocked = true;
+                foreach (Connection<T> second in Connections)
+                    if (connection.Source == second.Destination && connection.Destination == second.Source) second.Blocked = true;
+            }
+        }
+
+        public void BlockNodes(List<Connection<T>> way)
+        {
+            foreach (Connection<T> connection in way)
+            {
+                connection.Source.Blocked = true;
+                connection.Destination.Blocked = true;
+            }
+        }
+
         public void ClearHighlights()
         {
             foreach (Connection<T> connection in Connections) connection.Highlighted = false;
@@ -86,6 +111,6 @@ namespace GraphLibrary
             Selected = null;
         }
 
-        
+
     }
 }

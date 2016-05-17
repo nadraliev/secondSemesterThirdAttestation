@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using GraphLibrary;
+using System.IO;
 
 namespace GraphForm
 {
@@ -95,6 +96,60 @@ namespace GraphForm
                                 {
                                     MessageBox.Show("No way");
                                 }
+                            } else if (find_not_crossing_rbtn.Checked)
+                            {
+                                List<List<Connection<string>>> notCrossingNodesWays = new List<List<Connection<string>>>();
+                                List<List<Connection<string>>> notCrossingConnectionsWays = new List<List<Connection<string>>>();
+                                List<Connection<string>> tempWay = graph.Selected.FindShortestWay(graph, temp);
+                                while (tempWay != null && tempWay.Count != 0)
+                                {
+                                    notCrossingNodesWays.Add(tempWay);
+                                    if (tempWay.Count == 1) tempWay[0].Blocked = true;
+                                    graph.BlockNodes(tempWay);
+                                    tempWay = graph.Selected.FindShortestWay(graph, temp);
+                                }
+                                graph.ClearBlocks();
+                                while (tempWay != null && tempWay.Count != 0)
+                                {
+                                    notCrossingConnectionsWays.Add(tempWay);
+                                    if (tempWay.Count == 1) tempWay[0].Blocked = true;
+                                    graph.BlockConnections(tempWay);
+                                    tempWay = graph.Selected.FindShortestWay(graph, temp);
+                                }
+                                graph.ClearBlocks();
+                                tempWay = null;
+
+
+                                List<string> notCrossingNodesString = new List<string>();
+                                List<string> notCrossingConnectionsString = new List<string>();
+                                notCrossingNodesString.Add("Ways with not crossing nodes: ");
+                                notCrossingConnectionsString.Add("Ways with not crossing connections: ");
+                                string tempString = String.Empty;
+                                foreach (List<Connection<string>> way in notCrossingNodesWays)
+                                {
+                                    tempString = String.Empty;
+                                    foreach (Connection<string> connection in way)
+                                    {
+                                        tempString += connection.Source.Value.ToString() + ", ";
+                                    }
+                                    tempString += way.Last().Destination.Value.ToString();
+                                    notCrossingNodesString.Add(tempString);
+                                }
+
+                                foreach (List<Connection<string>> way in notCrossingConnectionsWays)
+                                {
+                                    tempString = String.Empty;
+                                    foreach (Connection<string> connection in way)
+                                    {
+                                        tempString += connection.Source.Value.ToString() + ", ";
+                                    }
+                                    tempString += way.Last().Destination.Value.ToString();
+                                    notCrossingConnectionsString.Add(tempString);
+                                }
+
+
+                                File.WriteAllLines("result.txt", notCrossingNodesString);
+
                             }
                             graph.Selected = null;
                         } 
