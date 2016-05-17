@@ -43,7 +43,6 @@ namespace GraphForm
             this.clear_graph_btn = new System.Windows.Forms.Button();
             this.add_element_tb = new System.Windows.Forms.TextBox();
             this.find_node_min_summ_btn = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.graph_output)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.connection_weight)).BeginInit();
             this.SuspendLayout();
@@ -192,22 +191,11 @@ namespace GraphForm
             this.find_node_min_summ_btn.UseVisualStyleBackColor = true;
             this.find_node_min_summ_btn.Click += new System.EventHandler(this.find_node_min_summ_btn_Click);
             // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(837, 106);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 17;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
             // main_form
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1912, 1017);
-            this.Controls.Add(this.button1);
             this.Controls.Add(this.find_node_min_summ_btn);
             this.Controls.Add(this.add_element_tb);
             this.Controls.Add(this.clear_graph_btn);
@@ -246,7 +234,6 @@ namespace GraphForm
         private System.Windows.Forms.Button clear_graph_btn;
         private System.Windows.Forms.TextBox add_element_tb;
         private System.Windows.Forms.Button find_node_min_summ_btn;
-        private System.Windows.Forms.Button button1;
     }
 }
 
