@@ -14,10 +14,7 @@ namespace GraphLibrary
 
         public bool Highlighted { get; set; }
 
-       
-        public int Weight { get; set; }
-
-        
+        public int Weight { get; set; }  
 
         public Connection(GraphNode<T> source, GraphNode<T> destination, int weight)
         {
@@ -25,10 +22,6 @@ namespace GraphLibrary
             Destination = destination;
             Weight = weight;
             Highlighted = false;
-        }
-
-      
-
-        
+        }        
     }
 }

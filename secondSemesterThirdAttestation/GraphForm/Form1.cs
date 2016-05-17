@@ -81,7 +81,7 @@ namespace GraphForm
                             {
                                 //creating two-way connection
                                 graph.AddConnection(graph.Selected, temp, (int)connection_weight.Value);
-                                graph.AddConnection(temp, graph.Selected, (int)connection_weight.Value);
+                               
                             } else if (find_shortest_way_rbtn.Checked)
                             {
                                 List<Connection<string>> way = graph.Selected.FindShortestWay(graph, temp);
@@ -181,6 +181,16 @@ namespace GraphForm
             GC.WaitForPendingFinalizers();
         }
 
-       
+        private void button1_Click(object sender, EventArgs e)
+        {
+            List<Connection<string>> way = graph.Selected.FindShortestWay(graph, graph.Selected);
+            if (way != null && way.Count != 0)
+            {
+                shortest_way_label.Text = graph.FindWayLength(way).ToString();
+                graph.ClearVisits();
+                graph.HighlightWay(way);
+                graph_output.Refresh();
+            }
+        }
     }
 }

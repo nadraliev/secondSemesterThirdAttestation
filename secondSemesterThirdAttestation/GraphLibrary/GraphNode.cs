@@ -40,9 +40,7 @@ namespace GraphLibrary
 
         public List<Connection<T>> FindShortestWay(Graph<T> graph, GraphNode<T> to)
         {
-            if (this == to) return new List<Connection<T>>();
-            else
-            {
+           
                 Visisted = true;    //mark node as visited to avoid loop
                 List<Connection<T>> temp;
                 List<Connection<T>> minWay = new List<Connection<T>>(); //result
@@ -77,7 +75,7 @@ namespace GraphLibrary
                 Visisted = false;
                 if (minWay.Count != 0 && minWay.Last().Destination != to) return null;
                 else return minWay;
-            }
+            
         }
 
 
