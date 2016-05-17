@@ -22,6 +22,7 @@ namespace GraphLibrary
 
         public bool Visisted { get; set; }
         public bool Highlighted { get; set; }
+        public bool Blocked { get; set; }
 
 
         
@@ -36,6 +37,7 @@ namespace GraphLibrary
             CoordY = 0;
             Visisted = false;
             Highlighted = false;
+            Blocked = false;
         }
 
         public List<Connection<T>> FindShortestWay(Graph<T> graph, GraphNode<T> to)
@@ -50,29 +52,31 @@ namespace GraphLibrary
 
                 foreach (Connection<T> connection in OutConnections)
                 {
-                    temp = new List<Connection<T>>();
-                    temp.Add(connection);   //include current connection
-
-                    if (connection.Destination != to)   //we're not at destination, go recursively
+                    if (!connection.Blocked)
                     {
-                        if (!connection.Destination.Visisted)
-                        {
-                            List<Connection<T>> foo = connection.Destination.FindShortestWay(graph, to);
-                            if (foo != null)
-                                temp.AddRange(foo);
-                        }
-                    }
-                    if (temp.Count != 0 && temp.Last().Destination == to)
-                    {
-                        if (min >= graph.FindWayLength(temp))
-                        {
-                            minWay = temp;
-                            min = graph.FindWayLength(minWay);
-                        }
-                        
-                    }
+                        temp = new List<Connection<T>>();
+                        temp.Add(connection);   //include current connection
 
+                        if (connection.Destination != to)   //we're not at destination, go recursively
+                        {
+                            if (!connection.Destination.Visisted && !connection.Destination.Blocked)
+                            {
+                                List<Connection<T>> foo = connection.Destination.FindShortestWay(graph, to);
+                                if (foo != null)
+                                    temp.AddRange(foo);
+                            }
+                        }
+                        if (temp.Count != 0 && temp.Last().Destination == to)
+                        {
+                            if (min >= graph.FindWayLength(temp))
+                            {
+                                minWay = temp;
+                                min = graph.FindWayLength(minWay);
+                            }
 
+                        }
+
+                    }
                 }
                 Visisted = false;
                 if (minWay.Count != 0 && minWay.Last().Destination != to) return null;
