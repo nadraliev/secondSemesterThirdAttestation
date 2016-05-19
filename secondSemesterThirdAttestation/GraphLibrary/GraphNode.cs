@@ -40,6 +40,19 @@ namespace GraphLibrary
             Blocked = false;
         }
 
+        public GraphNode(int id, T value, int X, int Y)
+        {
+            Id = id;
+            Value = value;
+            OutConnections = new List<Connection<T>>();
+            InConnections = new List<Connection<T>>();
+            CoordX = X;
+            CoordY = Y;
+            Visisted = false;
+            Highlighted = false;
+            Blocked = false;
+        }
+
         public List<Connection<T>> FindShortestWay(Graph<T> graph, GraphNode<T> to)
         {
             if (this == to) return new List<Connection<T>>();

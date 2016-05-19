@@ -78,79 +78,6 @@ namespace GraphForm
                         if (temp != graph.Selected && graph.Selected != null)
                         {
                             //selected two nodes
-                            if (create_connection_rbtn.Checked)
-                            {
-                                //creating two-way connection
-                                graph.AddConnection(graph.Selected, temp, (int)connection_weight.Value);
-                                graph.AddConnection(temp, graph.Selected, (int)connection_weight.Value);
-                            } else if (find_shortest_way_rbtn.Checked)
-                            {
-                                List<Connection<string>> way = graph.Selected.FindShortestWay(graph, temp);
-                                if (way != null && way.Count != 0)
-                                {
-                                    shortest_way_label.Text = graph.FindWayLength(way).ToString();
-                                    graph.ClearVisits();
-                                    graph.HighlightWay(way);
-                                    graph_output.Refresh();
-                                } else
-                                {
-                                    MessageBox.Show("No way");
-                                }
-                            } else if (find_not_crossing_rbtn.Checked)
-                            {
-                                List<List<Connection<string>>> notCrossingNodesWays = new List<List<Connection<string>>>();
-                                List<List<Connection<string>>> notCrossingConnectionsWays = new List<List<Connection<string>>>();
-                                List<Connection<string>> tempWay = graph.Selected.FindShortestWay(graph, temp);
-                                while (tempWay != null && tempWay.Count != 0)
-                                {
-                                    notCrossingNodesWays.Add(tempWay);
-                                    if (tempWay.Count == 1) tempWay[0].Blocked = true;
-                                    graph.BlockNodes(tempWay);
-                                    tempWay = graph.Selected.FindShortestWay(graph, temp);
-                                }
-                                graph.ClearBlocks();
-                                while (tempWay != null && tempWay.Count != 0)
-                                {
-                                    notCrossingConnectionsWays.Add(tempWay);
-                                    if (tempWay.Count == 1) tempWay[0].Blocked = true;
-                                    graph.BlockConnections(tempWay);
-                                    tempWay = graph.Selected.FindShortestWay(graph, temp);
-                                }
-                                graph.ClearBlocks();
-                                tempWay = null;
-
-
-                                List<string> notCrossingNodesString = new List<string>();
-                                List<string> notCrossingConnectionsString = new List<string>();
-                                notCrossingNodesString.Add("Ways with not crossing nodes: ");
-                                notCrossingConnectionsString.Add("Ways with not crossing connections: ");
-                                string tempString = String.Empty;
-                                foreach (List<Connection<string>> way in notCrossingNodesWays)
-                                {
-                                    tempString = String.Empty;
-                                    foreach (Connection<string> connection in way)
-                                    {
-                                        tempString += connection.Source.Value.ToString() + ", ";
-                                    }
-                                    tempString += way.Last().Destination.Value.ToString();
-                                    notCrossingNodesString.Add(tempString);
-                                }
-
-                                foreach (List<Connection<string>> way in notCrossingConnectionsWays)
-                                {
-                                    tempString = String.Empty;
-                                    foreach (Connection<string> connection in way)
-                                    {
-                                        tempString += connection.Source.Value.ToString() + ", ";
-                                    }
-                                    tempString += way.Last().Destination.Value.ToString();
-                                    notCrossingConnectionsString.Add(tempString);
-                                }
-
-
-                                File.WriteAllLines("result.txt", notCrossingNodesString);
-
-                            }
                             graph.Selected = null;
                         } 
                     }
@@ -185,12 +112,7 @@ namespace GraphForm
             graph_output.Refresh();
         }
 
-        private void add_node_button_Click(object sender, EventArgs e)
-        {
-            if (graph == null) graph = new Graph<string>();
-            graph.AddNode(add_element_tb.Text);
-            graph_output.Refresh();
-        }
+       
 
         private void find_node_min_summ_btn_Click(object sender, EventArgs e)
         {
@@ -236,6 +158,41 @@ namespace GraphForm
             GC.WaitForPendingFinalizers();
         }
 
-       
+        private void gen_field_btn_Click(object sender, EventArgs e)
+        {
+            graph = new Graph<string>();
+            int n = (int)input_n_nud.Value;
+            int nSqrt = Convert.ToInt32(Math.Sqrt(n));
+            int curX = 0;
+            int curY = 0;
+            int offset = 20;
+            GraphNode<string> prev = null;
+            while (curX < graph_output.Width && n >0)
+            {
+                while (curY < graph_output.Height && curY/offset+1 <= nSqrt && n >0)
+                {
+                    graph.AddNode(String.Empty, curX, curY);
+                    if (prev != null)
+                    {
+                        graph.AddConnection(graph.Nodes.Last(), prev, 0);
+                        graph.AddConnection(prev, graph.Nodes.Last(), 0);
+                    }
+                    if (graph.Nodes.Count - 1 - nSqrt >= 0)
+                    {
+                        graph.AddConnection(graph.Nodes.Last(), graph.Nodes[graph.Count - 1 - nSqrt], 0);
+                        graph.AddConnection(graph.Nodes[graph.Count - 1 - nSqrt], graph.Nodes.Last(), 0);
+                    }
+                    prev = graph.Nodes.Last();
+                    n--;
+                    curY += offset;
+                }
+                prev = null;
+                curX += offset;
+                curY = 0;
+            }
+
+            
+            graph_output.Refresh();
+        }
     }
 }

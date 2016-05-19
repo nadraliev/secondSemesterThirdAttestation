@@ -34,6 +34,12 @@ namespace GraphLibrary
             Count++;
         }
 
+        public void AddNode(T value, int X, int Y)
+        {
+            Nodes.Add(new GraphNode<T>(Count, value, X, Y));
+            Count++;
+        }
+
         public void AddConnection(GraphNode<T> source, GraphNode<T> destination, int weight)
         {
             if (source != null && destination != null)
