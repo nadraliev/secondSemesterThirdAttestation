@@ -114,31 +114,7 @@ namespace GraphForm
 
        
 
-        private void find_node_min_summ_btn_Click(object sender, EventArgs e)
-        {
-            if (graph != null)
-            {
-                int min = int.MaxValue;
-                int summ = 0;
-                GraphNode<string> result = null;
-                foreach (GraphNode<string> node in graph.Nodes)
-                {
-                    summ = 0;
-                    foreach (GraphNode<string> secondNode in graph.Nodes)
-                    {
-                        summ += graph.FindWayLength(node.FindShortestWay(graph, secondNode));
-                        graph.ClearVisits();
-                    }
-                    if (min >= summ)
-                    {
-                        result = node;
-                        min = summ;
-                    }
-                }
-                if (result != null) result.Highlighted = true;
-                graph_output.Refresh();
-            }
-        }
+       
 
 
         //------------------------------------------------------//
