@@ -40,6 +40,7 @@ namespace GraphForm
             this.result_lbl = new System.Windows.Forms.Label();
             this.check_rbtn = new System.Windows.Forms.RadioButton();
             this.delete_connection_rbtn = new System.Windows.Forms.RadioButton();
+            this.label1 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.graph_output)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.input_n_nud)).BeginInit();
             this.SuspendLayout();
@@ -53,7 +54,6 @@ namespace GraphForm
             this.graph_output.TabStop = false;
             this.graph_output.Paint += new System.Windows.Forms.PaintEventHandler(this.picture_box_paint);
             this.graph_output.MouseDown += new System.Windows.Forms.MouseEventHandler(this.graph_output_mouse_down);
-            
             this.graph_output.MouseUp += new System.Windows.Forms.MouseEventHandler(this.graph_output_mouse_up);
             // 
             // shortest_way_label
@@ -158,11 +158,22 @@ namespace GraphForm
             this.delete_connection_rbtn.Text = "Delete connection";
             this.delete_connection_rbtn.UseVisualStyleBackColor = true;
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.ForeColor = System.Drawing.SystemColors.AppWorkspace;
+            this.label1.Location = new System.Drawing.Point(533, 19);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(348, 13);
+            this.label1.TabIndex = 21;
+            this.label1.Text = "Click \"Check\" or choose node and click \"Choose\" or choose two nodes";
+            // 
             // main_form
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1275, 661);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.delete_connection_rbtn);
             this.Controls.Add(this.check_rbtn);
             this.Controls.Add(this.result_lbl);
@@ -194,6 +205,7 @@ namespace GraphForm
         private System.Windows.Forms.Label result_lbl;
         private System.Windows.Forms.RadioButton check_rbtn;
         private System.Windows.Forms.RadioButton delete_connection_rbtn;
+        private System.Windows.Forms.Label label1;
     }
 }
 
