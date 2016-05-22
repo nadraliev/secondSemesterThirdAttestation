@@ -8,7 +8,7 @@ using GraphLibrary;
 
 namespace GraphForm
 {
-    public static class DrawingGraph<T>
+    public static class DrawingGraph
     {
         //------------------------customization-------------//
         private static int padding = 10;
@@ -16,7 +16,7 @@ namespace GraphForm
 
 
 
-        public static Bitmap DrawConnection(Connection<T> connection, Pen linePen, Brush textBrush, Font font, Graphics graphics)
+        public static Bitmap DrawConnection(Connection connection, Pen linePen, Brush textBrush, Font font, Graphics graphics)
         {
             SizeF stringSize = graphics.MeasureString(connection.Weight.ToString(), font);
             //caclulate bitmap size (line size)
@@ -31,7 +31,7 @@ namespace GraphForm
             return BitmapConnection;
         } 
 
-        public static Bitmap DrawNode(GraphNode<T> node, Brush backgroundBrush, Brush textBrush, Font font, Graphics graphics)
+        public static Bitmap DrawNode(GraphNode node, Brush backgroundBrush, Brush textBrush, Font font, Graphics graphics)
         {
             SizeF stringSize = graphics.MeasureString(node.Value.ToString(), font);
             Bitmap BitmapNode = new Bitmap(Convert.ToInt32(stringSize.Width) + padding, Convert.ToInt32(stringSize.Height) + padding);
@@ -43,7 +43,7 @@ namespace GraphForm
             return BitmapNode;
         }
 
-        public static Bitmap DrawGraph(Graph<T> graph, Graphics graphics, Brush nodeBackgroundBrush, Brush selectedNodeBrush, Brush highlightedNodeBrush, Brush nodeTextBrush, Brush connectionTextBrush, Pen connectionPen, Pen highlightedConnectionPen, Font nodeFont, Font connectionFont, int width, int height)
+        public static Bitmap DrawGraph(Graph graph, Graphics graphics, Brush nodeBackgroundBrush, Brush selectedNodeBrush, Brush highlightedNodeBrush, Brush nodeTextBrush, Brush connectionTextBrush, Pen connectionPen, Pen highlightedConnectionPen, Font nodeFont, Font connectionFont, int width, int height)
         {
             Bitmap BitmapGraph = new Bitmap(width, height);
             Graphics graphGraphics = Graphics.FromImage(BitmapGraph);
@@ -51,7 +51,7 @@ namespace GraphForm
             List<float[]> nodesCoords = new List<float[]>();
             List<Bitmap> connectionsBitmap = new List<Bitmap>();
             List<float[]> connectionsCoord = new List<float[]>();
-            foreach (GraphNode<T> node in graph.Nodes)
+            foreach (GraphNode node in graph.Nodes)
             {
                 if (graph.Selected == node)  nodesBitmap.Add(DrawNode(node, selectedNodeBrush, nodeTextBrush, nodeFont, graphics)); 
                 else if (node.Highlighted) nodesBitmap.Add(DrawNode(node, highlightedNodeBrush, nodeTextBrush, nodeFont, graphics));
@@ -59,7 +59,7 @@ namespace GraphForm
                 nodesCoords.Add(new float[2] { node.CoordX, node.CoordY });
             }
 
-            foreach (Connection<T> connection in graph.Connections)
+            foreach (Connection connection in graph.Connections)
             {
                 if (connection.Highlighted) connectionsBitmap.Add(DrawConnection( connection, highlightedConnectionPen, connectionTextBrush, connectionFont, graphics));
                 else connectionsBitmap.Add(DrawConnection( connection,connectionPen, connectionTextBrush, connectionFont, graphics));

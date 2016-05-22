@@ -7,53 +7,53 @@ using System.Drawing;
 
 namespace GraphLibrary
 {
-    public class Graph<T>
+    public class Graph
     {
-        public List<GraphNode<T>> Nodes { get; private set; }
-        public List<Connection<T>> Connections { get; private set; }
+        public List<GraphNode> Nodes { get; private set; }
+        public List<Connection> Connections { get; private set; }
 
         public int Count { get; private set; }
 
 
-        public GraphNode<T> Selected { get; set; }
+        public GraphNode Selected { get; set; }
 
         public bool IsDragging;
 
 
         public Graph()
         {
-            Nodes = new List<GraphNode<T>>();
-            Connections = new List<Connection<T>>();
+            Nodes = new List<GraphNode>();
+            Connections = new List<Connection>();
             Count = 0;
             IsDragging = false;
         }
 
-        public void AddNode(T value)
+        public void AddNode(string value)
         {
-            Nodes.Add(new GraphNode<T>(Count, value));
+            Nodes.Add(new GraphNode(Count, value));
             Count++;
         }
 
-        public void AddNode(T value, int X, int Y)
+        public void AddNode(string value, int X, int Y)
         {
-            Nodes.Add(new GraphNode<T>(Count, value, X, Y));
+            Nodes.Add(new GraphNode(Count, value, X, Y));
             Count++;
         }
 
-        public void AddConnection(GraphNode<T> source, GraphNode<T> destination, int weight)
+        public void AddConnection(GraphNode source, GraphNode destination, int weight)
         {
             if (source != null && destination != null)
             {
-                Connection<T> connection = new Connection<T>(source, destination, weight);
+                Connection connection = new Connection(source, destination, weight);
                 Connections.Add(connection);
                 source.OutConnections.Add(connection);  //links to connection duplicates to node to reduce calculations during drawing
                 destination.InConnections.Add(connection);
             }
         }
 
-        public GraphNode<T> FindNode(double x, double y)
+        public GraphNode FindNode(double x, double y)
         {
-            foreach (GraphNode<T> node in Nodes)
+            foreach (GraphNode node in Nodes)
                 if ((x > node.CoordX && x < node.CoordX + 2 * (node.CenterCoordX - node.CoordX)) && (y > node.CoordY && y < node.CoordY + 2 * (node.CenterCoordY - node.CoordY)))
                     return node;
             return null;
@@ -61,49 +61,49 @@ namespace GraphLibrary
 
 
 
-        public int FindWayLength(List<Connection<T>> way)
+        public int FindWayLength(List<Connection> way)
         {
             int result = 0;
             if (way != null)
-                foreach (Connection<T> connection in way) result += connection.Weight;
+                foreach (Connection connection in way) result += connection.Weight;
             return result;
         }
 
         public void ClearVisits()
         {
-            foreach (GraphNode<T> node in Nodes) node.Visisted = false;
+            foreach (GraphNode node in Nodes) node.Visisted = false;
         }
 
-        public void HighlightWay(List<Connection<T>> way)
+        public void HighlightWay(List<Connection> way)
         {
-            foreach (Connection<T> connection in way)
+            foreach (Connection connection in way)
             {
                 connection.Highlighted = true;
                 connection.Source.Highlighted = true;
                 connection.Destination.Highlighted = true;
-                foreach (Connection<T> second in Connections) if (connection.Source == second.Destination && connection.Destination == second.Source) second.Highlighted = true;
+                foreach (Connection second in Connections) if (connection.Source == second.Destination && connection.Destination == second.Source) second.Highlighted = true;
             }
         }
 
         public void ClearBlocks()
         {
-            foreach (GraphNode<T> node in Nodes) node.Blocked = false;
-            foreach (Connection<T> connection in Connections) connection.Blocked = false;
+            foreach (GraphNode node in Nodes) node.Blocked = false;
+            foreach (Connection connection in Connections) connection.Blocked = false;
         }
 
-        public void BlockConnections(List<Connection<T>> way)
+        public void BlockConnections(List<Connection> way)
         {
-            foreach (Connection<T> connection in way)
+            foreach (Connection connection in way)
             {
                 connection.Blocked = true;
-                foreach (Connection<T> second in Connections)
+                foreach (Connection second in Connections)
                     if (connection.Source == second.Destination && connection.Destination == second.Source) second.Blocked = true;
             }
         }
 
-        public void BlockNodes(List<Connection<T>> way)
+        public void BlockNodes(List<Connection> way)
         {
-            foreach (Connection<T> connection in way)
+            foreach (Connection connection in way)
             {
                 connection.Source.Blocked = true;
                 connection.Destination.Blocked = true;
@@ -112,9 +112,8 @@ namespace GraphLibrary
 
         public void ClearHighlights()
         {
-            foreach (Connection<T> connection in Connections) connection.Highlighted = false;
-            foreach (GraphNode<T> node in Nodes) node.Highlighted = false;
-            Selected = null;
+            foreach (Connection connection in Connections) connection.Highlighted = false;
+            foreach (GraphNode node in Nodes) node.Highlighted = false;
         }
 
 

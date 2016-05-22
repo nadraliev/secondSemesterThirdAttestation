@@ -14,7 +14,7 @@ namespace GraphForm
 {
     public partial class main_form : Form
     {
-        private Graph<string> graph;
+        private Graph graph;
 
         private int PressedX;
         private int PressedY;
@@ -35,7 +35,7 @@ namespace GraphForm
         public main_form()
         {
             InitializeComponent();
-            graph = new Graph<string>();
+            graph = new Graph();
         }
 
         public void ResizeElements()
@@ -72,13 +72,71 @@ namespace GraphForm
                 {
                     if (!(args.X == PressedX && args.Y == PressedY)) 
                         graph.Selected = null;
-                    GraphNode<string> temp = graph.FindNode(args.X, args.Y);
+                    GraphNode temp = graph.FindNode(args.X, args.Y);
                     if (temp != null)
                     {
                         if (temp != graph.Selected && graph.Selected != null)
                         {
                             //selected two nodes
+                            if (check_rbtn.Checked)
+                            {
+                                if (graph.Selected.FindDirection(temp) != -1)
+                                {
+                                    graph.Selected.Blocked = true;
+                                    bool result = true;
+                                    foreach (GraphNode node in graph.Nodes)
+                                    {
+                                        List<Connection> way = null;
+                                        if (node != graph.Selected && node != temp)
+                                        {
+                                            way = temp.FindShortestWay(graph, node, graph.Selected.FindDirection(temp));
+                                            if (way == null || way.Count == 0)
+                                            {
+                                                result = false;
+                                            }
+                                            else if (way != null && way.Count != 0)
+                                            {
+                                                graph.HighlightWay(way);
+                                                graph_output.Refresh();
+                                                System.Threading.Thread.Sleep(1000);
+                                                graph.ClearHighlights();
+                                            }
+                                        }
+                                    }
+                                    graph.Selected.Blocked = false;
+                                    result_lbl.Text = result.ToString();
+                                }
+                            } else if (delete_connection_rbtn.Checked)
+                            {
+                                Connection connectionToDelete = null;
+                                foreach (Connection connection in graph.Selected.OutConnections)
+                                {
+                                    if (connection.Destination == temp)
+                                    {
+                                        connectionToDelete = connection;
+                                    }
+                                }
+                                if (connectionToDelete != null)
+                                {
+                                    graph.Selected.OutConnections.Remove(connectionToDelete);
+                                    graph.Connections.Remove(connectionToDelete);
+                                }
+                                foreach (Connection connection in graph.Selected.InConnections)
+                                {
+                                    if (connection.Source == temp)
+                                    {
+                                        connectionToDelete = connection;
+                                    }
+                                }
+                                if (connectionToDelete != null)
+                                {
+                                    graph.Selected.InConnections.Remove(connectionToDelete);
+                                    graph.Connections.Remove(connectionToDelete);
+                                }
+                                graph_output.Refresh();
+                            }
                             graph.Selected = null;
+                            
                         } 
                     }
                     graph.IsDragging = false;
@@ -87,18 +145,7 @@ namespace GraphForm
             }
         }
 
-        private void graph_output_mouse_move(object sender, MouseEventArgs args)
-        {
-            if (graph != null)
-            {
-                if (graph.Selected != null && graph.IsDragging)
-                {
-                    graph.Selected.CoordX = args.X;
-                    graph.Selected.CoordY = args.Y;
-                    graph_output.Refresh();
-                }
-            }
-        }
+        
 
         private void clear_highlights_btn_Click(object sender, EventArgs e)
         {
@@ -108,22 +155,87 @@ namespace GraphForm
 
         private void clear_graph_btn_Click(object sender, EventArgs e)
         {
-            graph = new Graph<string>();
+            graph = new Graph();
             graph_output.Refresh();
         }
 
-       
 
-       
+        private void check_btn_Click(object sender, EventArgs e)
+        {
+            if (graph.Selected != null)
+            {
+                bool result = true;
+                foreach (Connection connection in graph.Selected.OutConnections)
+                {
+                    graph.Selected.Blocked = true;
+                    foreach (GraphNode node in graph.Nodes)
+                    {
+                        List<Connection> way = null;
+                        if (node != graph.Selected && node != connection.Destination)
+                        {
+                            way = connection.Destination.FindShortestWay(graph, node, graph.Selected.FindDirection(connection.Destination));
+                            if (way == null)
+                            {
+                                result = false;
+                            }
+                            else if (way != null)
+                            {
+                                graph.HighlightWay(way);
+                                graph.HighlightWay(new List<Connection> { connection });
+                                graph_output.Refresh();
+                                System.Threading.Thread.Sleep(1000);
+                                graph.ClearHighlights();
+                            }
+                        }
+                    }
+                }
+                graph.Selected.Blocked = false;
+                graph.Selected = null;
+                result_lbl.Text = result.ToString();
+            } else
+            {
+                foreach (GraphNode start in graph.Nodes)
+                {
+                    bool result = true;
+                    foreach (Connection connection in start.OutConnections)
+                    {
+                        start.Blocked = true;
+                        foreach (GraphNode node in graph.Nodes)
+                        {
+                            List<Connection> way = null;
+                            if (node != start && node != connection.Destination)
+                            {
+                                way = connection.Destination.FindShortestWay(graph, node, start.FindDirection(connection.Destination));
+                                if (way == null)
+                                {
+                                    result = false;
+                                }
+                                else if (way != null)
+                                {
+                                    graph.HighlightWay(way);
+                                    graph.HighlightWay(new List<Connection> { connection });
+                                    graph_output.Refresh();
+                                    System.Threading.Thread.Sleep(1000);
+                                    graph.ClearHighlights();
+                                }
+                            }
+                        }
+                    }
+                   start.Blocked = false;
+                    result_lbl.Text = result.ToString();
+                }
+            }
+        }
+
 
 
         //------------------------------------------------------//
 
 
-        public void DrawGraphInt(Graph<string> graph, Graphics graphics)
+        public void DrawGraphInt(Graph graph, Graphics graphics)
         {
             graphics.Clear(BackColor);
-            Bitmap graphBitmap = DrawingGraph<string>.DrawGraph( graph, graphics, nodeBackground, selectedNodeBrush, highlightedNodeBrush, nodeText, connectionText, connectionLine, highlightedConnectionPen, fontNode, fontConnection, graph_output.Width, graph_output.Height);
+            Bitmap graphBitmap = DrawingGraph.DrawGraph( graph, graphics, nodeBackground, selectedNodeBrush, highlightedNodeBrush, nodeText, connectionText, connectionLine, highlightedConnectionPen, fontNode, fontConnection, graph_output.Width, graph_output.Height);
             graphics.DrawImage(graphBitmap, 0, 0);
         }
 
@@ -136,18 +248,19 @@ namespace GraphForm
 
         private void gen_field_btn_Click(object sender, EventArgs e)
         {
-            graph = new Graph<string>();
+            graph = new Graph();
             int n = (int)input_n_nud.Value;
             int nSqrt = Convert.ToInt32(Math.Sqrt(n));
             int curX = 0;
             int curY = 0;
-            int offset = 20;
-            GraphNode<string> prev = null;
+            int offset = 70;
+            int counter = 10;
+            GraphNode prev = null;
             while (curX < graph_output.Width && n >0)
             {
                 while (curY < graph_output.Height && curY/offset+1 <= nSqrt && n >0)
                 {
-                    graph.AddNode(String.Empty, curX, curY);
+                    graph.AddNode(counter++.ToString(), curX, curY);
                     if (prev != null)
                     {
                         graph.AddConnection(graph.Nodes.Last(), prev, 0);
@@ -170,5 +283,7 @@ namespace GraphForm
             
             graph_output.Refresh();
         }
+
+        
     }
 }

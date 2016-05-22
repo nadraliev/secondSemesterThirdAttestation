@@ -7,10 +7,10 @@ using System.Drawing;
 
 namespace GraphLibrary
 {
-    public class Connection<T>
+    public class Connection
     {
-        public GraphNode<T> Source { get; set; }
-        public GraphNode<T> Destination { get; set; }
+        public GraphNode Source { get; set; }
+        public GraphNode Destination { get; set; }
 
         public bool Highlighted { get; set; }
 
@@ -19,7 +19,7 @@ namespace GraphLibrary
 
         public bool Blocked { get; set; }
 
-        public Connection(GraphNode<T> source, GraphNode<T> destination, int weight)
+        public Connection(GraphNode source, GraphNode destination, int weight)
         {
             Source = source;
             Destination = destination;

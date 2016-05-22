@@ -7,13 +7,13 @@ using System.Drawing;
 
 namespace GraphLibrary
 {
-    public class GraphNode<T>
+    public class GraphNode
     {
-        public T Value { get; set; }
+        public string Value { get; set; }
         public int Id { get; internal set; }
 
-        public List<Connection<T>> OutConnections { get; internal set; }
-        public List<Connection<T>> InConnections { get; internal set; }
+        public List<Connection> OutConnections { get; internal set; }
+        public List<Connection> InConnections { get; internal set; }
 
         public float CoordX { get; set; }
         public float CoordY { get; set; }
@@ -24,15 +24,20 @@ namespace GraphLibrary
         public bool Highlighted { get; set; }
         public bool Blocked { get; set; }
 
+        public static int LEFstring = 0;
+        public static int RIGHstring = 1;
+        public static int UP = 2;
+        public static int DOWN = 3;
+
 
         
 
-        public GraphNode(int id, T value)
+        public GraphNode(int id, string value)
         {
             Id = id;
             Value = value;
-            OutConnections = new List<Connection<T>>();
-            InConnections = new List<Connection<T>>();
+            OutConnections = new List<Connection>();
+            InConnections = new List<Connection>();
             CoordX = 0;
             CoordY = 0;
             Visisted = false;
@@ -40,12 +45,12 @@ namespace GraphLibrary
             Blocked = false;
         }
 
-        public GraphNode(int id, T value, int X, int Y)
+        public GraphNode(int id, string value, int X, int Y)
         {
             Id = id;
             Value = value;
-            OutConnections = new List<Connection<T>>();
-            InConnections = new List<Connection<T>>();
+            OutConnections = new List<Connection>();
+            InConnections = new List<Connection>();
             CoordX = X;
             CoordY = Y;
             Visisted = false;
@@ -53,28 +58,43 @@ namespace GraphLibrary
             Blocked = false;
         }
 
-        public List<Connection<T>> FindShortestWay(Graph<T> graph, GraphNode<T> to)
+        public int FindDirection(GraphNode end)
         {
-            if (this == to) return new List<Connection<T>>();
+            if (CoordX == end.CoordX)
+            {
+                if (CoordY > end.CoordY) return GraphNode.UP;
+                else return GraphNode.DOWN;
+            }
+            else if (CoordY == end.CoordY)
+            {
+                if (CoordX > end.CoordX) return GraphNode.LEFstring;
+                else return GraphNode.RIGHstring;
+            }
+            else return -1;
+        }
+
+        public List<Connection> FindShortestWay(Graph graph, GraphNode to, int prevDirection)
+        {
+            if (this == to) return new List<Connection>();
             else
             {
                 Visisted = true;    //mark node as visited to avoid loop
-                List<Connection<T>> temp;
-                List<Connection<T>> minWay = new List<Connection<T>>(); //result
+                List<Connection> temp;
+                List<Connection> minWay = new List<Connection>(); //result
                 int min = int.MaxValue;
 
-                foreach (Connection<T> connection in OutConnections)
+                foreach (Connection connection in OutConnections)
                 {
-                    if (!connection.Blocked)
+                    if (!connection.Blocked && prevDirection != FindDirection(connection.Destination))
                     {
-                        temp = new List<Connection<T>>();
+                        temp = new List<Connection>();
                         temp.Add(connection);   //include current connection
 
                         if (connection.Destination != to)   //we're not at destination, go recursively
                         {
                             if (!connection.Destination.Visisted && !connection.Destination.Blocked)
                             {
-                                List<Connection<T>> foo = connection.Destination.FindShortestWay(graph, to);
+                                List<Connection> foo = connection.Destination.FindShortestWay(graph, to, FindDirection(connection.Destination));
                                 if (foo != null)
                                     temp.AddRange(foo);
                             }
