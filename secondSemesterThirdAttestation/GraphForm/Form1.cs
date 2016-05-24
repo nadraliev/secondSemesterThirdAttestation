@@ -118,8 +118,7 @@ namespace GraphForm
                                 }
                                 if (connectionToDelete != null)
                                 {
-                                    graph.Selected.OutConnections.Remove(connectionToDelete);
-                                    graph.Connections.Remove(connectionToDelete);
+                                    graph.RemoveConnection(connectionToDelete);
                                 }
                                 foreach (Connection connection in graph.Selected.InConnections)
                                 {
@@ -130,8 +129,7 @@ namespace GraphForm
                                 }
                                 if (connectionToDelete != null)
                                 {
-                                    graph.Selected.InConnections.Remove(connectionToDelete);
-                                    graph.Connections.Remove(connectionToDelete);
+                                    graph.RemoveConnection(connectionToDelete);
                                 }
                                 graph_output.Refresh();
                             }
@@ -167,6 +165,7 @@ namespace GraphForm
                 bool result = true;
                 foreach (Connection connection in graph.Selected.OutConnections)
                 {
+                    if (!result) break;
                     graph.Selected.Blocked = true;
                     foreach (GraphNode node in graph.Nodes)
                     {
@@ -174,7 +173,7 @@ namespace GraphForm
                         if (node != graph.Selected && node != connection.Destination)
                         {
                             way = connection.Destination.FindShortestWay(graph, node, graph.Selected.FindDirection(connection.Destination));
-                            if (way == null)
+                            if (way == null || way.Count == 0)
                             {
                                 result = false;
                             }
@@ -194,9 +193,11 @@ namespace GraphForm
                 result_lbl.Text = result.ToString();
             } else
             {
+                bool result = true;
                 foreach (GraphNode start in graph.Nodes)
                 {
-                    bool result = true;
+                    if (!result) break;
+                   
                     foreach (Connection connection in start.OutConnections)
                     {
                         start.Blocked = true;
@@ -206,9 +207,11 @@ namespace GraphForm
                             if (node != start && node != connection.Destination)
                             {
                                 way = connection.Destination.FindShortestWay(graph, node, start.FindDirection(connection.Destination));
-                                if (way == null)
+                                if (way == null || way.Count == 0)
                                 {
                                     result = false;
+                                    result_lbl.Text = result.ToString();
+                                    break;
                                 }
                                 else if (way != null)
                                 {
@@ -225,6 +228,8 @@ namespace GraphForm
                     result_lbl.Text = result.ToString();
                 }
             }
+            graph.ClearHighlights();
+            graph_output.Refresh();
         }
 
 
