@@ -42,8 +42,6 @@ namespace GraphForm
             this.clear_highlights_btn = new System.Windows.Forms.Button();
             this.clear_graph_btn = new System.Windows.Forms.Button();
             this.add_element_tb = new System.Windows.Forms.TextBox();
-            this.find_node_min_summ_btn = new System.Windows.Forms.Button();
-            this.find_not_crossing_rbtn = new System.Windows.Forms.RadioButton();
             ((System.ComponentModel.ISupportInitialize)(this.graph_output)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.connection_weight)).BeginInit();
             this.SuspendLayout();
@@ -149,7 +147,7 @@ namespace GraphForm
             // clear_highlights_btn
             // 
             this.clear_highlights_btn.Location = new System.Drawing.Point(1034, 35);
-            this.clear_highlights_btn.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.clear_highlights_btn.Margin = new System.Windows.Forms.Padding(2);
             this.clear_highlights_btn.Name = "clear_highlights_btn";
             this.clear_highlights_btn.Size = new System.Drawing.Size(118, 19);
             this.clear_highlights_btn.TabIndex = 13;
@@ -160,7 +158,7 @@ namespace GraphForm
             // clear_graph_btn
             // 
             this.clear_graph_btn.Location = new System.Drawing.Point(1165, 35);
-            this.clear_graph_btn.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.clear_graph_btn.Margin = new System.Windows.Forms.Padding(2);
             this.clear_graph_btn.Name = "clear_graph_btn";
             this.clear_graph_btn.Size = new System.Drawing.Size(73, 19);
             this.clear_graph_btn.TabIndex = 14;
@@ -171,40 +169,16 @@ namespace GraphForm
             // add_element_tb
             // 
             this.add_element_tb.Location = new System.Drawing.Point(15, 37);
-            this.add_element_tb.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.add_element_tb.Margin = new System.Windows.Forms.Padding(2);
             this.add_element_tb.Name = "add_element_tb";
             this.add_element_tb.Size = new System.Drawing.Size(141, 20);
             this.add_element_tb.TabIndex = 15;
-            // 
-            // find_node_min_summ_btn
-            // 
-            this.find_node_min_summ_btn.Location = new System.Drawing.Point(1034, 63);
-            this.find_node_min_summ_btn.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.find_node_min_summ_btn.Name = "find_node_min_summ_btn";
-            this.find_node_min_summ_btn.Size = new System.Drawing.Size(204, 21);
-            this.find_node_min_summ_btn.TabIndex = 16;
-            this.find_node_min_summ_btn.Text = "Find node with min summ of length";
-            this.find_node_min_summ_btn.UseVisualStyleBackColor = true;
-            this.find_node_min_summ_btn.Click += new System.EventHandler(this.find_node_min_summ_btn_Click);
-            // 
-            // find_not_crossing_rbtn
-            // 
-            this.find_not_crossing_rbtn.AutoSize = true;
-            this.find_not_crossing_rbtn.Location = new System.Drawing.Point(352, 80);
-            this.find_not_crossing_rbtn.Name = "find_not_crossing_rbtn";
-            this.find_not_crossing_rbtn.Size = new System.Drawing.Size(132, 17);
-            this.find_not_crossing_rbtn.TabIndex = 17;
-            this.find_not_crossing_rbtn.TabStop = true;
-            this.find_not_crossing_rbtn.Text = "Find not crossing ways";
-            this.find_not_crossing_rbtn.UseVisualStyleBackColor = true;
             // 
             // main_form
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1275, 661);
-            this.Controls.Add(this.find_not_crossing_rbtn);
-            this.Controls.Add(this.find_node_min_summ_btn);
             this.Controls.Add(this.add_element_tb);
             this.Controls.Add(this.clear_graph_btn);
             this.Controls.Add(this.clear_highlights_btn);
@@ -240,8 +214,6 @@ namespace GraphForm
         private System.Windows.Forms.Button clear_highlights_btn;
         private System.Windows.Forms.Button clear_graph_btn;
         private System.Windows.Forms.TextBox add_element_tb;
-        private System.Windows.Forms.Button find_node_min_summ_btn;
-        private System.Windows.Forms.RadioButton find_not_crossing_rbtn;
     }
 }
 
