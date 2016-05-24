@@ -63,6 +63,11 @@ namespace GraphLibrary
             return result;
         }
 
+        public int CountWayNodes(List<Connection<T>> way)
+        {
+            return way.Last().Destination == way.First().Source ? way.Count : way.Count - 1;
+        }
+
         public void ClearVisits()
         {
             foreach (GraphNode<T> node in Nodes) node.Visisted = false;

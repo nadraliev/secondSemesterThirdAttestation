@@ -85,7 +85,7 @@ namespace GraphForm
                                 graph.AddConnection(temp, graph.Selected, (int)connection_weight.Value);
                             } else if (find_shortest_way_rbtn.Checked)
                             {
-                                List<Connection<string>> way = graph.Selected.FindShortestWay(graph, temp);
+                                List<Connection<string>> way = graph.Selected.FindLongeststWay(graph, temp);
                                 if (way != null && way.Count != 0)
                                 {
                                     shortest_way_label.Text = graph.FindWayLength(way).ToString();
@@ -100,13 +100,13 @@ namespace GraphForm
                             {
                                 List<List<Connection<string>>> notCrossingNodesWays = new List<List<Connection<string>>>();
                                 List<List<Connection<string>>> notCrossingConnectionsWays = new List<List<Connection<string>>>();
-                                List<Connection<string>> tempWay = graph.Selected.FindShortestWay(graph, temp);
+                                List<Connection<string>> tempWay = graph.Selected.FindLongeststWay(graph, temp);
                                 while (tempWay != null && tempWay.Count != 0)
                                 {
                                     notCrossingNodesWays.Add(tempWay);
                                     if (tempWay.Count == 1) tempWay[0].Blocked = true;
                                     graph.BlockNodes(tempWay);
-                                    tempWay = graph.Selected.FindShortestWay(graph, temp);
+                                    tempWay = graph.Selected.FindLongeststWay(graph, temp);
                                 }
                                 graph.ClearBlocks();
                                 while (tempWay != null && tempWay.Count != 0)
@@ -114,7 +114,7 @@ namespace GraphForm
                                     notCrossingConnectionsWays.Add(tempWay);
                                     if (tempWay.Count == 1) tempWay[0].Blocked = true;
                                     graph.BlockConnections(tempWay);
-                                    tempWay = graph.Selected.FindShortestWay(graph, temp);
+                                    tempWay = graph.Selected.FindLongeststWay(graph, temp);
                                 }
                                 graph.ClearBlocks();
                                 tempWay = null;
@@ -204,7 +204,7 @@ namespace GraphForm
                     summ = 0;
                     foreach (GraphNode<string> secondNode in graph.Nodes)
                     {
-                        summ += graph.FindWayLength(node.FindShortestWay(graph, secondNode));
+                        summ += graph.FindWayLength(node.FindLongeststWay(graph, secondNode));
                         graph.ClearVisits();
                     }
                     if (min >= summ)

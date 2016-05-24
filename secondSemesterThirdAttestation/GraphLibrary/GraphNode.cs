@@ -40,15 +40,15 @@ namespace GraphLibrary
             Blocked = false;
         }
 
-        public List<Connection<T>> FindShortestWay(Graph<T> graph, GraphNode<T> to)
+        public List<Connection<T>> FindLongeststWay(Graph<T> graph, GraphNode<T> to)
         {
             if (this == to) return new List<Connection<T>>();
             else
             {
                 Visisted = true;    //mark node as visited to avoid loop
                 List<Connection<T>> temp;
-                List<Connection<T>> minWay = new List<Connection<T>>(); //result
-                int min = int.MaxValue;
+                List<Connection<T>> maxWay = new List<Connection<T>>(); //result
+                int max = int.MinValue;
 
                 foreach (Connection<T> connection in OutConnections)
                 {
@@ -61,17 +61,17 @@ namespace GraphLibrary
                         {
                             if (!connection.Destination.Visisted && !connection.Destination.Blocked)
                             {
-                                List<Connection<T>> foo = connection.Destination.FindShortestWay(graph, to);
+                                List<Connection<T>> foo = connection.Destination.FindLongeststWay(graph, to);
                                 if (foo != null)
                                     temp.AddRange(foo);
                             }
                         }
                         if (temp.Count != 0 && temp.Last().Destination == to)
                         {
-                            if (min >= graph.FindWayLength(temp))
+                            if (max <= graph.CountWayNodes(temp))
                             {
-                                minWay = temp;
-                                min = graph.FindWayLength(minWay);
+                                maxWay = temp;
+                                max = graph.CountWayNodes(maxWay);
                             }
 
                         }
@@ -79,8 +79,8 @@ namespace GraphLibrary
                     }
                 }
                 Visisted = false;
-                if (minWay.Count != 0 && minWay.Last().Destination != to) return null;
-                else return minWay;
+                if (maxWay.Count != 0 && maxWay.Last().Destination != to) return null;
+                else return maxWay;
             }
         }
 
