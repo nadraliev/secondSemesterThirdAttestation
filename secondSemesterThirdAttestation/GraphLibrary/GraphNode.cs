@@ -79,7 +79,7 @@ namespace GraphLibrary
                     }
                 }
                 Visisted = false;
-                if (minWay.Count != 0 && minWay.Last().Destination != to) return null;
+                if (minWay.Count != 0 && minWay.Last().Destination != to) return new List<Connection<T>>();
                 else return minWay;
             }
         }

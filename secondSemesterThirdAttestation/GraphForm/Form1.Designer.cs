@@ -38,12 +38,11 @@ namespace GraphForm
             this.label3 = new System.Windows.Forms.Label();
             this.shortest_way_label = new System.Windows.Forms.Label();
             this.create_connection_rbtn = new System.Windows.Forms.RadioButton();
-            this.find_shortest_way_rbtn = new System.Windows.Forms.RadioButton();
+            this.check_rbtn = new System.Windows.Forms.RadioButton();
             this.clear_highlights_btn = new System.Windows.Forms.Button();
             this.clear_graph_btn = new System.Windows.Forms.Button();
             this.add_element_tb = new System.Windows.Forms.TextBox();
-            this.find_node_min_summ_btn = new System.Windows.Forms.Button();
-            this.find_not_crossing_rbtn = new System.Windows.Forms.RadioButton();
+            this.result_lbl = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.graph_output)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.connection_weight)).BeginInit();
             this.SuspendLayout();
@@ -135,21 +134,21 @@ namespace GraphForm
             this.create_connection_rbtn.Text = "Create connection";
             this.create_connection_rbtn.UseVisualStyleBackColor = true;
             // 
-            // find_shortest_way_rbtn
+            // check_rbtn
             // 
-            this.find_shortest_way_rbtn.AutoSize = true;
-            this.find_shortest_way_rbtn.Location = new System.Drawing.Point(352, 60);
-            this.find_shortest_way_rbtn.Name = "find_shortest_way_rbtn";
-            this.find_shortest_way_rbtn.Size = new System.Drawing.Size(107, 17);
-            this.find_shortest_way_rbtn.TabIndex = 12;
-            this.find_shortest_way_rbtn.TabStop = true;
-            this.find_shortest_way_rbtn.Text = "Find shortest way";
-            this.find_shortest_way_rbtn.UseVisualStyleBackColor = true;
+            this.check_rbtn.AutoSize = true;
+            this.check_rbtn.Location = new System.Drawing.Point(352, 60);
+            this.check_rbtn.Name = "check_rbtn";
+            this.check_rbtn.Size = new System.Drawing.Size(56, 17);
+            this.check_rbtn.TabIndex = 12;
+            this.check_rbtn.TabStop = true;
+            this.check_rbtn.Text = "Check";
+            this.check_rbtn.UseVisualStyleBackColor = true;
             // 
             // clear_highlights_btn
             // 
             this.clear_highlights_btn.Location = new System.Drawing.Point(1034, 35);
-            this.clear_highlights_btn.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.clear_highlights_btn.Margin = new System.Windows.Forms.Padding(2);
             this.clear_highlights_btn.Name = "clear_highlights_btn";
             this.clear_highlights_btn.Size = new System.Drawing.Size(118, 19);
             this.clear_highlights_btn.TabIndex = 13;
@@ -160,7 +159,7 @@ namespace GraphForm
             // clear_graph_btn
             // 
             this.clear_graph_btn.Location = new System.Drawing.Point(1165, 35);
-            this.clear_graph_btn.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.clear_graph_btn.Margin = new System.Windows.Forms.Padding(2);
             this.clear_graph_btn.Name = "clear_graph_btn";
             this.clear_graph_btn.Size = new System.Drawing.Size(73, 19);
             this.clear_graph_btn.TabIndex = 14;
@@ -171,44 +170,28 @@ namespace GraphForm
             // add_element_tb
             // 
             this.add_element_tb.Location = new System.Drawing.Point(15, 37);
-            this.add_element_tb.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.add_element_tb.Margin = new System.Windows.Forms.Padding(2);
             this.add_element_tb.Name = "add_element_tb";
             this.add_element_tb.Size = new System.Drawing.Size(141, 20);
             this.add_element_tb.TabIndex = 15;
             // 
-            // find_node_min_summ_btn
+            // result_lbl
             // 
-            this.find_node_min_summ_btn.Location = new System.Drawing.Point(1034, 63);
-            this.find_node_min_summ_btn.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.find_node_min_summ_btn.Name = "find_node_min_summ_btn";
-            this.find_node_min_summ_btn.Size = new System.Drawing.Size(204, 21);
-            this.find_node_min_summ_btn.TabIndex = 16;
-            this.find_node_min_summ_btn.Text = "Find node with min summ of length";
-            this.find_node_min_summ_btn.UseVisualStyleBackColor = true;
-            this.find_node_min_summ_btn.Click += new System.EventHandler(this.find_node_min_summ_btn_Click);
-            // 
-            // find_not_crossing_rbtn
-            // 
-            this.find_not_crossing_rbtn.AutoSize = true;
-            this.find_not_crossing_rbtn.Location = new System.Drawing.Point(352, 80);
-            this.find_not_crossing_rbtn.Name = "find_not_crossing_rbtn";
-            this.find_not_crossing_rbtn.Size = new System.Drawing.Size(132, 17);
-            this.find_not_crossing_rbtn.TabIndex = 17;
-            this.find_not_crossing_rbtn.TabStop = true;
-            this.find_not_crossing_rbtn.Text = "Find not crossing ways";
-            this.find_not_crossing_rbtn.UseVisualStyleBackColor = true;
+            this.result_lbl.Location = new System.Drawing.Point(498, 64);
+            this.result_lbl.Name = "result_lbl";
+            this.result_lbl.Size = new System.Drawing.Size(100, 23);
+            this.result_lbl.TabIndex = 16;
             // 
             // main_form
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1275, 661);
-            this.Controls.Add(this.find_not_crossing_rbtn);
-            this.Controls.Add(this.find_node_min_summ_btn);
+            this.Controls.Add(this.result_lbl);
             this.Controls.Add(this.add_element_tb);
             this.Controls.Add(this.clear_graph_btn);
             this.Controls.Add(this.clear_highlights_btn);
-            this.Controls.Add(this.find_shortest_way_rbtn);
+            this.Controls.Add(this.check_rbtn);
             this.Controls.Add(this.create_connection_rbtn);
             this.Controls.Add(this.shortest_way_label);
             this.Controls.Add(this.label3);
@@ -236,12 +219,11 @@ namespace GraphForm
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label shortest_way_label;
         private System.Windows.Forms.RadioButton create_connection_rbtn;
-        private System.Windows.Forms.RadioButton find_shortest_way_rbtn;
+        private System.Windows.Forms.RadioButton check_rbtn;
         private System.Windows.Forms.Button clear_highlights_btn;
         private System.Windows.Forms.Button clear_graph_btn;
         private System.Windows.Forms.TextBox add_element_tb;
-        private System.Windows.Forms.Button find_node_min_summ_btn;
-        private System.Windows.Forms.RadioButton find_not_crossing_rbtn;
+        private System.Windows.Forms.Label result_lbl;
     }
 }
 

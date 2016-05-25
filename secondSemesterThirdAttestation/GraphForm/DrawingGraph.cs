@@ -43,7 +43,7 @@ namespace GraphForm
             return BitmapNode;
         }
 
-        public static Bitmap DrawGraph(Graph<T> graph, Graphics graphics, Brush nodeBackgroundBrush, Brush selectedNodeBrush, Brush highlightedNodeBrush, Brush nodeTextBrush, Brush connectionTextBrush, Pen connectionPen, Pen highlightedConnectionPen, Font nodeFont, Font connectionFont, int width, int height)
+        public static Bitmap DrawGraph(Graph<T> graph, Graphics graphics, Brush nodeBackgroundBrush, Brush selectedNodeBrush, Brush highlightedNodeBrush, Brush blockedNodeBrush, Brush nodeTextBrush, Brush connectionTextBrush, Pen connectionPen, Pen highlightedConnectionPen, Font nodeFont, Font connectionFont, int width, int height)
         {
             Bitmap BitmapGraph = new Bitmap(width, height);
             Graphics graphGraphics = Graphics.FromImage(BitmapGraph);
@@ -55,6 +55,7 @@ namespace GraphForm
             {
                 if (graph.Selected == node)  nodesBitmap.Add(DrawNode(node, selectedNodeBrush, nodeTextBrush, nodeFont, graphics)); 
                 else if (node.Highlighted) nodesBitmap.Add(DrawNode(node, highlightedNodeBrush, nodeTextBrush, nodeFont, graphics));
+                else if (node.Blocked) nodesBitmap.Add(DrawNode(node, blockedNodeBrush, nodeTextBrush, nodeFont, graphics));
                 else nodesBitmap.Add(DrawNode(node, nodeBackgroundBrush, nodeTextBrush, nodeFont, graphics));
                 nodesCoords.Add(new float[2] { node.CoordX, node.CoordY });
             }

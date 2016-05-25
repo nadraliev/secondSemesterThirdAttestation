@@ -26,6 +26,7 @@ namespace GraphForm
         private Brush nodeBackground = Brushes.DarkCyan;
         private Brush selectedNodeBrush = Brushes.Cyan;
         private Brush highlightedNodeBrush = Brushes.Cyan;
+        private Brush blockedNodeBrush = Brushes.AliceBlue;
         private Brush nodeText = Brushes.Black;
         private Brush connectionText = Brushes.Green;
         private Pen connectionLine = Pens.Black;
@@ -70,7 +71,7 @@ namespace GraphForm
             {
                 if (graph.Selected != null)
                 {
-                    if (!(args.X == PressedX && args.Y == PressedY)) 
+                    if (!(args.X == PressedX && args.Y == PressedY))
                         graph.Selected = null;
                     GraphNode<string> temp = graph.FindNode(args.X, args.Y);
                     if (temp != null)
@@ -83,76 +84,48 @@ namespace GraphForm
                                 //creating two-way connection
                                 graph.AddConnection(graph.Selected, temp, (int)connection_weight.Value);
                                 graph.AddConnection(temp, graph.Selected, (int)connection_weight.Value);
-                            } else if (find_shortest_way_rbtn.Checked)
+                            }
+                            else if (check_rbtn.Checked)
                             {
-                                List<Connection<string>> way = graph.Selected.FindShortestWay(graph, temp);
-                                if (way != null && way.Count != 0)
+                                bool result = false;
+                                foreach (GraphNode<string> firstNode in graph.Nodes)
                                 {
-                                    shortest_way_label.Text = graph.FindWayLength(way).ToString();
-                                    graph.ClearVisits();
-                                    graph.HighlightWay(way);
+                                    if (!result)
+                                    {
+                                        if (firstNode != graph.Selected && firstNode != temp)
+                                            foreach (GraphNode<string> secondNode in graph.Nodes)
+                                            {
+                                                if (!result)
+                                                {
+                                                    if (secondNode != graph.Selected && secondNode != temp && secondNode != firstNode)
+                                                        foreach (GraphNode<string> thirdNode in graph.Nodes)
+                                                        {
+                                                            if (!result)
+                                                            {
+                                                                graph.ClearBlocks();
+                                                                if (thirdNode != graph.Selected && thirdNode != temp && thirdNode != firstNode && thirdNode != secondNode)
+                                                                {
+                                                                    firstNode.Blocked = true;
+                                                                    secondNode.Blocked = true;
+                                                                    thirdNode.Blocked = true;
+                                                                    if (graph.Selected.FindShortestWay(graph, temp).Count == 0)
+                                                                        result = true;
+                                                                }
+                                                            }
+                                                        }
+                                                }
+                                            }
+                                    }
+                                }
+                                if (result)
+                                {
+                                    result_lbl.Text = "Possible";
                                     graph_output.Refresh();
-                                } else
-                                {
-                                    MessageBox.Show("No way");
                                 }
-                            } else if (find_not_crossing_rbtn.Checked)
-                            {
-                                List<List<Connection<string>>> notCrossingNodesWays = new List<List<Connection<string>>>();
-                                List<List<Connection<string>>> notCrossingConnectionsWays = new List<List<Connection<string>>>();
-                                List<Connection<string>> tempWay = graph.Selected.FindShortestWay(graph, temp);
-                                while (tempWay != null && tempWay.Count != 0)
-                                {
-                                    notCrossingNodesWays.Add(tempWay);
-                                    if (tempWay.Count == 1) tempWay[0].Blocked = true;
-                                    graph.BlockNodes(tempWay);
-                                    tempWay = graph.Selected.FindShortestWay(graph, temp);
-                                }
-                                graph.ClearBlocks();
-                                while (tempWay != null && tempWay.Count != 0)
-                                {
-                                    notCrossingConnectionsWays.Add(tempWay);
-                                    if (tempWay.Count == 1) tempWay[0].Blocked = true;
-                                    graph.BlockConnections(tempWay);
-                                    tempWay = graph.Selected.FindShortestWay(graph, temp);
-                                }
-                                graph.ClearBlocks();
-                                tempWay = null;
-
-
-                                List<string> notCrossingNodesString = new List<string>();
-                                List<string> notCrossingConnectionsString = new List<string>();
-                                notCrossingNodesString.Add("Ways with not crossing nodes: ");
-                                notCrossingConnectionsString.Add("Ways with not crossing connections: ");
-                                string tempString = String.Empty;
-                                foreach (List<Connection<string>> way in notCrossingNodesWays)
-                                {
-                                    tempString = String.Empty;
-                                    foreach (Connection<string> connection in way)
-                                    {
-                                        tempString += connection.Source.Value.ToString() + ", ";
-                                    }
-                                    tempString += way.Last().Destination.Value.ToString();
-                                    notCrossingNodesString.Add(tempString);
-                                }
-
-                                foreach (List<Connection<string>> way in notCrossingConnectionsWays)
-                                {
-                                    tempString = String.Empty;
-                                    foreach (Connection<string> connection in way)
-                                    {
-                                        tempString += connection.Source.Value.ToString() + ", ";
-                                    }
-                                    tempString += way.Last().Destination.Value.ToString();
-                                    notCrossingConnectionsString.Add(tempString);
-                                }
-
-
-                                File.WriteAllLines("result.txt", notCrossingNodesString);
-
+                                else result_lbl.Text = "Not possible";
                             }
                             graph.Selected = null;
-                        } 
+                        }
                     }
                     graph.IsDragging = false;
                     graph_output.Refresh();
@@ -225,7 +198,7 @@ namespace GraphForm
         public void DrawGraphInt(Graph<string> graph, Graphics graphics)
         {
             graphics.Clear(BackColor);
-            Bitmap graphBitmap = DrawingGraph<string>.DrawGraph( graph, graphics, nodeBackground, selectedNodeBrush, highlightedNodeBrush, nodeText, connectionText, connectionLine, highlightedConnectionPen, fontNode, fontConnection, graph_output.Width, graph_output.Height);
+            Bitmap graphBitmap = DrawingGraph<string>.DrawGraph(graph, graphics, nodeBackground, selectedNodeBrush, highlightedNodeBrush, blockedNodeBrush, nodeText, connectionText, connectionLine, highlightedConnectionPen, fontNode, fontConnection, graph_output.Width, graph_output.Height);
             graphics.DrawImage(graphBitmap, 0, 0);
         }
 
@@ -236,6 +209,6 @@ namespace GraphForm
             GC.WaitForPendingFinalizers();
         }
 
-       
+
     }
 }
