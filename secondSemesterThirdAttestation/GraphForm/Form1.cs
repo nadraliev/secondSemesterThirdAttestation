@@ -70,35 +70,20 @@ namespace GraphForm
             {
                 if (graph.Selected != null)
                 {
-                    if (!(args.X == PressedX && args.Y == PressedY)) 
+                    if (!(args.X == PressedX && args.Y == PressedY))
                         graph.Selected = null;
                     GraphNode<string> temp = graph.FindNode(args.X, args.Y);
                     if (temp != null)
                     {
                         if (temp != graph.Selected && graph.Selected != null)
                         {
-                            //selected two nodes
-                            if (create_connection_rbtn.Checked)
-                            {
-                                //creating two-way connection
-                                graph.AddConnection(graph.Selected, temp, (int)connection_weight.Value);
-                                graph.AddConnection(temp, graph.Selected, (int)connection_weight.Value);
-                            } else if (find_shortest_way_rbtn.Checked)
-                            {
-                                List<Connection<string>> way = graph.Selected.FindLongeststWay(graph, temp);
-                                if (way != null && way.Count != 0)
-                                {
-                                    shortest_way_label.Text = graph.FindWayLength(way).ToString();
-                                    graph.ClearVisits();
-                                    graph.HighlightWay(way);
-                                    graph_output.Refresh();
-                                } else
-                                {
-                                    MessageBox.Show("No way");
-                                }
-                            } 
+
+                            //creating two-way connection
+                            graph.AddConnection(graph.Selected, temp, (int)connection_weight.Value);
+                            graph.AddConnection(temp, graph.Selected, (int)connection_weight.Value);
+
                             graph.Selected = null;
-                        } 
+                        }
                     }
                     graph.IsDragging = false;
                     graph_output.Refresh();
@@ -138,8 +123,29 @@ namespace GraphForm
             graph_output.Refresh();
         }
 
-       
-        
+        private void findClosedWay_Click(object sender, EventArgs e)
+        {
+            bool result = false;
+            foreach (GraphNode<string> node in graph.Nodes)
+            {
+                if (!result)
+                {
+                    List<List<Connection<string>>> ways = node.FindAllWays(graph, node, null);
+                    foreach (List<Connection<string>> way in ways)
+                    {
+                        if (graph.WayContainsAllNodes(graph.MakeNodesWay(way)) && graph.FindWayLength(way) < 100)
+                        {
+                            graph.HighlightWay(way);
+                            graph_output.Refresh();
+                            result = true;
+                            break;
+                        }
+                    }
+                }
+            }
+            if (!result) MessageBox.Show("No such way");
+        }
+
 
 
         //------------------------------------------------------//
@@ -148,7 +154,7 @@ namespace GraphForm
         public void DrawGraphInt(Graph<string> graph, Graphics graphics)
         {
             graphics.Clear(BackColor);
-            Bitmap graphBitmap = DrawingGraph<string>.DrawGraph( graph, graphics, nodeBackground, selectedNodeBrush, highlightedNodeBrush, nodeText, connectionText, connectionLine, highlightedConnectionPen, fontNode, fontConnection, graph_output.Width, graph_output.Height);
+            Bitmap graphBitmap = DrawingGraph<string>.DrawGraph(graph, graphics, nodeBackground, selectedNodeBrush, highlightedNodeBrush, nodeText, connectionText, connectionLine, highlightedConnectionPen, fontNode, fontConnection, graph_output.Width, graph_output.Height);
             graphics.DrawImage(graphBitmap, 0, 0);
         }
 
@@ -159,6 +165,6 @@ namespace GraphForm
             GC.WaitForPendingFinalizers();
         }
 
-       
+
     }
 }

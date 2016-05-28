@@ -25,7 +25,7 @@ namespace GraphLibrary
         public bool Blocked { get; set; }
 
 
-        
+
 
         public GraphNode(int id, T value)
         {
@@ -38,6 +38,39 @@ namespace GraphLibrary
             Visisted = false;
             Highlighted = false;
             Blocked = false;
+        }
+
+        public List<List<Connection<T>>> FindAllWays(Graph<T> graph, GraphNode<T> to, GraphNode<T> sender)
+        {
+
+            Visisted = true;
+            List<List<Connection<T>>> ways = new List<List<Connection<T>>>();
+            List<List<Connection<T>>> nextWays = new List<List<Connection<T>>>();
+            List<Connection<T>> tempWay = new List<Connection<T>>();
+            foreach (Connection<T> connection in OutConnections)
+            {
+                if (connection.Destination != sender)
+                {
+                    if (connection.Destination == to)
+                    {
+                        tempWay.Add(connection);
+                        ways.Add(tempWay);
+                    }
+                    else if (!connection.Destination.Visisted)
+                    {
+                        nextWays = connection.Destination.FindAllWays(graph, to, this);
+                        foreach (List<Connection<T>> way in nextWays)
+                        {
+                            tempWay = new List<Connection<T>>() { connection };
+                            tempWay.AddRange(way);
+                            ways.Add(tempWay);
+                        }
+                    }
+                }
+            }
+            Visisted = false;
+            return ways;
+
         }
 
         public List<Connection<T>> FindLongeststWay(Graph<T> graph, GraphNode<T> to)
@@ -85,7 +118,7 @@ namespace GraphLibrary
         }
 
 
-        
+
 
     }
 }

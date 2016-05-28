@@ -29,7 +29,7 @@ namespace GraphForm
             else connectionGraphics.DrawLine(linePen, 0, height, width, 0);
             connectionGraphics.DrawString(connection.Weight.ToString(), font, textBrush, width / 2, height / 2);
             return BitmapConnection;
-        } 
+        }
 
         public static Bitmap DrawNode(GraphNode<T> node, Brush backgroundBrush, Brush textBrush, Font font, Graphics graphics)
         {

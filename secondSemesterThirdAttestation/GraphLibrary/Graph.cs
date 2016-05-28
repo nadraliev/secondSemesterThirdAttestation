@@ -109,6 +109,27 @@ namespace GraphLibrary
             }
         }
 
+        public bool WayContainsAllNodes(List<GraphNode<T>> way)
+        {
+            bool result = true;
+            foreach (GraphNode<T> node in Nodes)
+            {
+                if (!way.Contains(node)) result = false;
+            }
+            return result;
+        }
+
+        public List<GraphNode<T>> MakeNodesWay(List<Connection<T>> way)
+        {
+            if (way != null)
+            {
+                List<GraphNode<T>> newWay = new List<GraphNode<T>>();
+                newWay.Add(way.First().Source);
+                foreach (Connection<T> connection in way) newWay.Add(connection.Destination);
+                return newWay;
+            } return null;
+        }
+
         public void ClearHighlights()
         {
             foreach (Connection<T> connection in Connections) connection.Highlighted = false;
