@@ -158,7 +158,28 @@ namespace GraphLibrary
             Selected = null;
         }
 
-    
+        public void RemoveConnection(Connection<T> connection)
+        {
+            int index = -1;
+            for (int i = 0; i < Connections.Count; i++)
+                if (Connections[i] == connection) index = i;
+            Connections.RemoveAt(index);
+            for (int i = 0; i < connection.Source.OutConnections.Count; i++)
+                if (connection.Source.OutConnections[i] == connection) index = i;
+            connection.Source.OutConnections.RemoveAt(index);
+            for (int i = 0; i < connection.Destination.InConnections.Count; i++)
+                if (connection.Destination.InConnections[i] == connection) index = i;
+            connection.Destination.InConnections.RemoveAt(index);
+        }
+
+        public void RemoveNode(GraphNode<T> node)
+        {
+            foreach (Connection<T> connection in node.OutConnections) RemoveConnection(connection);
+            for (int i = 0; i < Nodes.Count; i++)
+            {
+                if (Nodes[i] == node) Nodes.RemoveAt(i);
+            }
+        }
 
 
     }
