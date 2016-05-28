@@ -174,7 +174,10 @@ namespace GraphLibrary
 
         public void RemoveNode(GraphNode<T> node)
         {
-            foreach (Connection<T> connection in node.OutConnections) RemoveConnection(connection);
+            while (node.OutConnections.Count > 0)
+                RemoveConnection(node.OutConnections[0]);
+            while (node.InConnections.Count > 0)
+                RemoveConnection(node.InConnections[0]);
             for (int i = 0; i < Nodes.Count; i++)
             {
                 if (Nodes[i] == node) Nodes.RemoveAt(i);

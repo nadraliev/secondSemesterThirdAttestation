@@ -217,7 +217,21 @@ namespace GraphForm
                 MessageBox.Show("Possible. Moving gears: " + graph.CountSpins());
             } else
             {
-                MessageBox.Show("Imposible");
+                int deleted = 0;
+                do
+                {
+                    foreach (GraphNode<string> node in graph.Nodes)
+                    {
+                        if (node.Jammed)
+                        {
+                            graph.RemoveNode(node);
+                            break;
+                        }
+                    }
+                    deleted++;
+                } while (!graph.DoSpin(graph.Selected));
+                MessageBox.Show("Impossible, need to delete " + deleted + " node");
+                graph_output.Refresh();
             }
             graph.ClearSpins();
         }
