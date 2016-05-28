@@ -34,6 +34,43 @@ namespace GraphLibrary
             Count++;
         }
 
+        public bool DoSpin(GraphNode<T> currGear)   //you need to determine spin for first Node for this method to work
+        {
+            int result = 0;     //0 - for OK, go recursively, 1 - for nothing changed, means ability to do spin, -1 - for jamming
+            bool changed = false;
+            int newSpin = (currGear.Spin + 1) % 2;
+            foreach (Connection<T> connection in currGear.OutConnections)
+            {     
+                if (connection.Destination.Spin != -1)
+                {
+                    if (connection.Destination.Spin != newSpin)
+                    {
+                        connection.Destination.Jammed = true;
+                        result = -1;
+                        break;
+                    }
+                }
+                else
+                {
+                    changed = true;
+                    connection.Destination.Spin = newSpin;
+                }
+            }
+            if (result == -1) return false;
+            if (!changed) result = 1;
+            else result = 0;
+            if (result == 1) return true;
+            else
+            {
+                foreach (Connection<T> connection in currGear.OutConnections)
+                {
+                    if (DoSpin(connection.Destination)) return true;
+                    else return false;
+                }
+            }
+            return false;
+        }
+
         public void AddConnection(GraphNode<T> source, GraphNode<T> destination, int weight)
         {
             if (source != null && destination != null)
@@ -53,7 +90,12 @@ namespace GraphLibrary
             return null;
         }
 
-
+        public int CountSpins()
+        {
+            int result = 0;
+            foreach (GraphNode<T> node in Nodes) if (node.Spin != -1) result++;
+            return result;
+        }
 
         public int FindWayLength(List<Connection<T>> way)
         {
@@ -85,6 +127,11 @@ namespace GraphLibrary
             foreach (Connection<T> connection in Connections) connection.Blocked = false;
         }
 
+        public void ClearSpins()
+        {
+            foreach (GraphNode<T> node in Nodes) node.Spin = -1;
+        }
+
         public void BlockConnections(List<Connection<T>> way)
         {
             foreach (Connection<T> connection in way)
@@ -110,6 +157,8 @@ namespace GraphLibrary
             foreach (GraphNode<T> node in Nodes) node.Highlighted = false;
             Selected = null;
         }
+
+    
 
 
     }

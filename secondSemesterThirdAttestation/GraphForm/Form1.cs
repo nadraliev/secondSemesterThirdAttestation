@@ -209,6 +209,17 @@ namespace GraphForm
             GC.WaitForPendingFinalizers();
         }
 
-
+        private void do_spin_Click(object sender, EventArgs e)
+        {
+            graph.Selected.Spin = 0;
+            if (graph.DoSpin(graph.Selected))
+            {
+                MessageBox.Show("Possible. Moving gears: " + graph.CountSpins());
+            } else
+            {
+                MessageBox.Show("Imposible");
+            }
+            graph.ClearSpins();
+        }
     }
 }

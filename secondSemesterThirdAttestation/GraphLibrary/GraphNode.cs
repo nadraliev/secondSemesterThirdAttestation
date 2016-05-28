@@ -23,8 +23,10 @@ namespace GraphLibrary
         public bool Visisted { get; set; }
         public bool Highlighted { get; set; }
         public bool Blocked { get; set; }
+        public bool Jammed { get; set; }
 
-
+        public int Spin { get; set; }
+   
         
 
         public GraphNode(int id, T value)
@@ -38,6 +40,8 @@ namespace GraphLibrary
             Visisted = false;
             Highlighted = false;
             Blocked = false;
+            Jammed = false;
+            Spin = -1;
         }
 
         public List<Connection<T>> FindShortestWay(Graph<T> graph, GraphNode<T> to)

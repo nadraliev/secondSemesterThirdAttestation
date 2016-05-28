@@ -43,6 +43,7 @@ namespace GraphForm
             this.clear_graph_btn = new System.Windows.Forms.Button();
             this.add_element_tb = new System.Windows.Forms.TextBox();
             this.result_lbl = new System.Windows.Forms.Label();
+            this.do_spin_btn = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.graph_output)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.connection_weight)).BeginInit();
             this.SuspendLayout();
@@ -147,10 +148,10 @@ namespace GraphForm
             // 
             // clear_highlights_btn
             // 
-            this.clear_highlights_btn.Location = new System.Drawing.Point(1034, 35);
+            this.clear_highlights_btn.Location = new System.Drawing.Point(1034, 33);
             this.clear_highlights_btn.Margin = new System.Windows.Forms.Padding(2);
             this.clear_highlights_btn.Name = "clear_highlights_btn";
-            this.clear_highlights_btn.Size = new System.Drawing.Size(118, 19);
+            this.clear_highlights_btn.Size = new System.Drawing.Size(118, 25);
             this.clear_highlights_btn.TabIndex = 13;
             this.clear_highlights_btn.Text = "Clear highlights";
             this.clear_highlights_btn.UseVisualStyleBackColor = true;
@@ -158,10 +159,10 @@ namespace GraphForm
             // 
             // clear_graph_btn
             // 
-            this.clear_graph_btn.Location = new System.Drawing.Point(1165, 35);
+            this.clear_graph_btn.Location = new System.Drawing.Point(1156, 33);
             this.clear_graph_btn.Margin = new System.Windows.Forms.Padding(2);
             this.clear_graph_btn.Name = "clear_graph_btn";
-            this.clear_graph_btn.Size = new System.Drawing.Size(73, 19);
+            this.clear_graph_btn.Size = new System.Drawing.Size(73, 24);
             this.clear_graph_btn.TabIndex = 14;
             this.clear_graph_btn.Text = "Clear graph";
             this.clear_graph_btn.UseVisualStyleBackColor = true;
@@ -182,11 +183,22 @@ namespace GraphForm
             this.result_lbl.Size = new System.Drawing.Size(100, 23);
             this.result_lbl.TabIndex = 16;
             // 
+            // do_spin_btn
+            // 
+            this.do_spin_btn.Location = new System.Drawing.Point(954, 33);
+            this.do_spin_btn.Name = "do_spin_btn";
+            this.do_spin_btn.Size = new System.Drawing.Size(75, 25);
+            this.do_spin_btn.TabIndex = 17;
+            this.do_spin_btn.Text = "Do spin";
+            this.do_spin_btn.UseVisualStyleBackColor = true;
+            this.do_spin_btn.Click += new System.EventHandler(this.do_spin_Click);
+            // 
             // main_form
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1275, 661);
+            this.Controls.Add(this.do_spin_btn);
             this.Controls.Add(this.result_lbl);
             this.Controls.Add(this.add_element_tb);
             this.Controls.Add(this.clear_graph_btn);
@@ -224,6 +236,7 @@ namespace GraphForm
         private System.Windows.Forms.Button clear_graph_btn;
         private System.Windows.Forms.TextBox add_element_tb;
         private System.Windows.Forms.Label result_lbl;
+        private System.Windows.Forms.Button do_spin_btn;
     }
 }
 
