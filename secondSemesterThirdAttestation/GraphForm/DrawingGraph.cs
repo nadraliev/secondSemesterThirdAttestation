@@ -27,7 +27,7 @@ namespace GraphForm
             if ((connection.Destination.CenterCoordY - connection.Source.CenterCoordY > 0 && connection.Destination.CenterCoordX - connection.Source.CenterCoordX > 0) || (connection.Destination.CenterCoordY - connection.Source.CenterCoordY < 0 && connection.Destination.CenterCoordX - connection.Source.CenterCoordX < 0))  //line is going from top left corner to bottom right
                 connectionGraphics.DrawLine(linePen, 0, 0, width, height);
             else connectionGraphics.DrawLine(linePen, 0, height, width, 0);
-            connectionGraphics.DrawString(connection.Weight.ToString(), font, textBrush, width / 2, height / 2);
+            //connectionGraphics.DrawString(connection.Weight.ToString(), font, textBrush, width / 2, height / 2);
             return BitmapConnection;
         } 
 

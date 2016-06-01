@@ -82,9 +82,10 @@ namespace GraphForm
                             if (create_connection_rbtn.Checked)
                             {
                                 //creating two-way connection
-                                graph.AddConnection(graph.Selected, temp, (int)connection_weight.Value);
-                                graph.AddConnection(temp, graph.Selected, (int)connection_weight.Value);
+                                graph.AddConnection(graph.Selected, temp, 1);
+                                graph.AddConnection(temp, graph.Selected, 1);
                             }
+                            //---Main mathod for number 12----------------------------//
                             else if (check_rbtn.Checked)
                             {
                                 bool result = false;
@@ -124,6 +125,7 @@ namespace GraphForm
                                 }
                                 else result_lbl.Text = "Not possible";
                             }
+                            //-------------------------------//
                             graph.Selected = null;
                         }
                     }
@@ -211,29 +213,38 @@ namespace GraphForm
 
         private void do_spin_Click(object sender, EventArgs e)
         {
-            graph.Selected.Spin = 0;
-            if (graph.DoSpin(graph.Selected))
+            if (graph.Selected != null)
             {
-                MessageBox.Show("Possible. Moving gears: " + graph.CountSpins());
-            } else
-            {
-                int deleted = 0;
-                do
+                graph.Selected.Spin = 0;
+                if (graph.DoSpin(graph.Selected))
                 {
-                    foreach (GraphNode<string> node in graph.Nodes)
+                    MessageBox.Show("Possible. Moving gears: " + graph.CountSpins());
+                }
+                else
+                {
+                    int deleted = 0;
+                    do
                     {
-                        if (node.Jammed)
+                        foreach (GraphNode<string> node in graph.Nodes)
                         {
-                            graph.RemoveNode(node);
-                            break;
+                            if (node.Jammed)
+                            {
+                                graph.RemoveNode(node);
+                                break;
+                            }
                         }
-                    }
-                    deleted++;
-                } while (!graph.DoSpin(graph.Selected));
-                MessageBox.Show("Impossible, need to delete " + deleted + " node");
-                graph_output.Refresh();
+                        deleted++;
+                    } while (!graph.DoSpin(graph.Selected));
+                    MessageBox.Show("Impossible, need to delete " + deleted + " node");
+                    graph_output.Refresh();
+                }
+                graph.ClearSpins();
             }
-            graph.ClearSpins();
+        }
+
+        private void main_form_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }
