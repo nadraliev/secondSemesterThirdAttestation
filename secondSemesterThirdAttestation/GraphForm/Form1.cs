@@ -89,33 +89,36 @@ namespace GraphForm
                             else if (check_rbtn.Checked)
                             {
                                 bool result = false;
-                                foreach (GraphNode<string> firstNode in graph.Nodes)
+                                foreach (Connection<string> firstConnection in graph.Connections)
                                 {
                                     if (!result)
                                     {
-                                        if (firstNode != graph.Selected && firstNode != temp)
-                                            foreach (GraphNode<string> secondNode in graph.Nodes)
+
+                                        foreach (Connection<string> secondConnection in graph.Connections)
+                                        {
+                                            if (!result)
                                             {
-                                                if (!result)
-                                                {
-                                                    if (secondNode != graph.Selected && secondNode != temp && secondNode != firstNode)
-                                                        foreach (GraphNode<string> thirdNode in graph.Nodes)
+                                                if (!(secondConnection.Source == firstConnection.Source && secondConnection.Destination == firstConnection.Destination) &&
+                                                    !(secondConnection.Source == firstConnection.Destination && secondConnection.Destination == firstConnection.Source))
+                                                    foreach (Connection<string> thirdConnection in graph.Connections)
+                                                    {
+                                                        if (!result)
                                                         {
-                                                            if (!result)
+                                                            graph.ClearBlocks();
+                                                            if ((!(secondConnection.Source == thirdConnection.Source && secondConnection.Destination == thirdConnection.Destination) &&
+                                                                !(secondConnection.Source == thirdConnection.Destination && secondConnection.Destination == thirdConnection.Source)) 
+                                                                &&
+                                                                !(thirdConnection.Source == firstConnection.Source && thirdConnection.Destination == firstConnection.Destination) &&
+                                                                !(thirdConnection.Source == firstConnection.Destination && thirdConnection.Destination == firstConnection.Source))
                                                             {
-                                                                graph.ClearBlocks();
-                                                                if (thirdNode != graph.Selected && thirdNode != temp && thirdNode != firstNode && thirdNode != secondNode)
-                                                                {
-                                                                    firstNode.Blocked = true;
-                                                                    secondNode.Blocked = true;
-                                                                    thirdNode.Blocked = true;
-                                                                    if (graph.Selected.FindShortestWay(graph, temp).Count == 0)
-                                                                        result = true;
-                                                                }
+                                                                graph.BlockConnections(new List<Connection<string>>() { firstConnection, secondConnection, thirdConnection });
+                                                                if (graph.Selected.FindShortestWay(graph, temp).Count == 0)
+                                                                    result = true;
                                                             }
                                                         }
-                                                }
+                                                    }
                                             }
+                                        }
                                     }
                                 }
                                 if (result)
@@ -151,6 +154,7 @@ namespace GraphForm
         private void clear_highlights_btn_Click(object sender, EventArgs e)
         {
             graph.ClearHighlights();
+            graph.ClearBlocks();
             graph_output.Refresh();
         }
 

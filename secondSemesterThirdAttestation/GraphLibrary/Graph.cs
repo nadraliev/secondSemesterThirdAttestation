@@ -110,6 +110,7 @@ namespace GraphLibrary
             foreach (GraphNode<T> node in Nodes) node.Visisted = false;
         }
 
+
         public void HighlightWay(List<Connection<T>> way)
         {
             foreach (Connection<T> connection in way)

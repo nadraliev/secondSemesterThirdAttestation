@@ -62,7 +62,7 @@ namespace GraphForm
 
             foreach (Connection<T> connection in graph.Connections)
             {
-                if (connection.Highlighted) connectionsBitmap.Add(DrawConnection( connection, highlightedConnectionPen, connectionTextBrush, connectionFont, graphics));
+                if (connection.Highlighted || connection.Blocked) connectionsBitmap.Add(DrawConnection( connection, highlightedConnectionPen, connectionTextBrush, connectionFont, graphics));
                 else connectionsBitmap.Add(DrawConnection( connection,connectionPen, connectionTextBrush, connectionFont, graphics));
                 connectionsCoord.Add(new float[4] { connection.Source.CenterCoordX, connection.Source.CenterCoordY, connection.Destination.CenterCoordX, connection.Destination.CenterCoordY });
             }
