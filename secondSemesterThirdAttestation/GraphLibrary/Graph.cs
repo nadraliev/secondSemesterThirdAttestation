@@ -39,6 +39,8 @@ namespace GraphLibrary
             if (source != null && destination != null)
             {
                 Connection<T> connection = new Connection<T>(source, destination, weight);
+               
+
                 Connections.Add(connection);
                 source.OutConnections.Add(connection);  //links to connection duplicates to node to reduce calculations during drawing
                 destination.InConnections.Add(connection);
@@ -109,6 +111,63 @@ namespace GraphLibrary
             foreach (Connection<T> connection in Connections) connection.Highlighted = false;
             foreach (GraphNode<T> node in Nodes) node.Highlighted = false;
             Selected = null;
+        }
+
+        public void DFS()
+        {
+            Stack<GraphNode<T>> s = new Stack<GraphNode<T>>();
+            s.Push(Nodes[0]);
+            Nodes[0].Visisted = true;
+            while (s.Count > 0)
+            {
+                //--------------------------------------------//
+                GraphNode<T>[] path = s.ToArray();
+                for (int k = 0; k < path.Length; k++)
+                    Console.Write(path[k].Value.ToString() + " ");
+                Console.WriteLine();
+                //--------------------------------------------//
+
+                GraphNode<T> v = s.Pop();
+                for (int i = 0; i < v.OutConnections.Count; ++i)
+                {
+                    if (!v.OutConnections[i].Destination.Visisted)
+                    {
+                        s.Push(v.OutConnections[i].Destination);
+                        v.OutConnections[i].Destination.Visisted = true;
+                    }
+
+
+                }
+            }
+            ClearVisits();
+        }
+
+        public void WFS()
+        {
+            Queue<GraphNode<T>> queue = new Queue<GraphNode<T>>();
+            queue.Enqueue(Nodes[0]);
+            while (queue.Count > 0)
+            {
+
+                //------------------------------------------//
+                GraphNode<T>[] path = queue.ToArray();
+                for (int k = 0; k < path.Length; k++)
+                    Console.Write(path[k].Value.ToString() + " ");
+                Console.WriteLine();
+                //----------------------------------------//
+
+
+                GraphNode<T> p = queue.Dequeue();
+                if (!p.Visisted)
+                {
+                    p.Visisted = true;
+                    foreach (Connection<T> connection in p.OutConnections)
+                    {
+                        queue.Enqueue(connection.Destination);
+                    }
+                }
+            }
+            ClearVisits();
         }
 
 

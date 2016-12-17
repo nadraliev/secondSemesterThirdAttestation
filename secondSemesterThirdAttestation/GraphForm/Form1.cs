@@ -236,6 +236,14 @@ namespace GraphForm
             GC.WaitForPendingFinalizers();
         }
 
-       
+        private void button1_Click(object sender, EventArgs e)
+        {
+            graph.DFS();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            graph.WFS();
+        }
     }
 }
